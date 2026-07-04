@@ -37,7 +37,7 @@ MathJax = {
 
 <div class="concept-box">
   <div class="label">核心问题</div>
-  <p>给定一个向量场 $F$，什么时候 $\int_C F\cdotdr$ 只依赖于起点和终点，而与具体走哪条路无关？</p>
+  <p>给定一个向量场 $F$，什么时候 $\int_C F\cdot dr$ 只依赖于起点和终点，而与具体走哪条路无关？</p>
   <p>答案：当 $F$ 是<strong>保守场</strong>（<span class="en-term">conservative vector field</span>）时。</p>
 </div>
 
@@ -45,7 +45,7 @@ MathJax = {
   <div class="def-label">DEFINITION — Conservative Vector Field / 保守向量场</div>
   <p>Let $W$ denote a subset of $\mathbb{R}^3$. A $C^1$ vector field $F : W \to \mathbb{R}^3$ is said to be conservative if there exists a scalar function $φ : W \to \mathbb{R}$ such that $F = \nablaφ$.</p>
   <p>此时对任意从 A 到 B 的曲线 C：</p>
-  <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">$\int_C F\cdotdr = φ(B) - φ(A)$</p>
+  <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">$\int_C F\cdot dr = φ(B) - φ(A)$</p>
   <p>这就是微积分基本定理的向量版本——线积分不依赖于路径！</p>
 </div>
 
@@ -119,13 +119,13 @@ MathJax = {
   <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">
     $\int_C F \cdot dr = \int_a^b F(r(t)) \cdot r'(t) dt$
   </p>
-  <p><strong>符号解释：</strong> $dr$ 是曲线的有向线元（<span class="en-term">oriented line element</span>），等于 $r'(t) dt$。物理上，如果 $F$ 是力场，$\int_C F\cdotdr$ 就是力沿曲线做的功（<span class="en-term">work</span>）。</p>
-  <p>闭曲线（<span class="en-term">closed curve</span>）上的线积分称为<strong>环量</strong>（<span class="en-term">circulation</span>），记为 $\oint_C F\cdotdr$。</p>
+  <p><strong>符号解释：</strong> $dr$ 是曲线的有向线元（<span class="en-term">oriented line element</span>），等于 $r'(t) dt$。物理上，如果 $F$ 是力场，$\int_C F\cdot dr$ 就是力沿曲线做的功（<span class="en-term">work</span>）。</p>
+  <p>闭曲线（<span class="en-term">closed curve</span>）上的线积分称为<strong>环量</strong>（<span class="en-term">circulation</span>），记为 $\oint_C F\cdot dr$。</p>
 </div>
 
 <div class="formula-block">
   <h3>例：Gradient 场的线积分（19-Q8 相关）</h3>
-  <p>计算 $\int_C (f\nabla g + g\nabla f)\cdotdr$，其中 $C$ 是椭圆 $x^2/a^2 + y^2/b^2 = 1$（逆时针方向），从 $(a,0)$ 开始到 $(0,b)$。</p>
+  <p>计算 $\int_C (f\nabla g + g\nabla f)\cdot dr$，其中 $C$ 是椭圆 $x^2/a^2 + y^2/b^2 = 1$（逆时针方向），从 $(a,0)$ 开始到 $(0,b)$。</p>
   <div class="step"><strong>关键观察：</strong> $f\nabla g + g\nabla f = \nabla(fg)$（乘积法则的梯度形式）。</div>
   <div class="step">所以 $F = \nabla(fg)$ 是保守场！线积分 = $fg|_A^B = f(B)g(B) - f(A)g(A)$。</div>
   <div class="step">不需要真的沿着椭圆做积分——这就是保守场的威力。</div>
@@ -158,7 +158,7 @@ MathJax = {
     <p>三个公式等价，选最方便的那个用。</p>
   </div>
   <div class="step">
-    <strong>寻找最大环量的闭曲线：</strong> 给定 $curl$ 的分布，找到使 $\oint F\cdotdr$ 最大的闭曲线——这是 19-Q10c 的考点。
+    <strong>寻找最大环量的闭曲线：</strong> 给定 $curl$ 的分布，找到使 $\oint F\cdot dr$ 最大的闭曲线——这是 19-Q10c 的考点。
   </div>
 </div>
 
@@ -193,13 +193,13 @@ MathJax = {
   <h3>用 Stokes 定理证明 curl(∇f) = 0（19-Q11c）</h3>
   <div class="step"><strong>Step 1：</strong> 任取一条闭曲线 $C$，它是某曲面 $S$ 的边界。</div>
   <div class="step"><strong>Step 2：</strong> 由 Stokes 定理：$\oint_C \nabla f \cdot dr = \iint_S curl(\nabla f)\cdot n dS$。</div>
-  <div class="step"><strong>Step 3：</strong> 但 $\nabla f$ 是保守场：$\int_C \nabla f\cdotdr = f(终点) - f(起点) = 0$（闭曲线）。</div>
+  <div class="step"><strong>Step 3：</strong> 但 $\nabla f$ 是保守场：$\int_C \nabla f\cdot dr = f(终点) - f(起点) = 0$（闭曲线）。</div>
   <div class="step"><strong>Step 4：</strong> 所以 $\iint_S curl(\nabla f)\cdot n dS = 0$ 对任意曲面 $S$ 成立。这意味着 $curl(\nabla f) = 0$。</div>
 </div>
 
 <div class="formula-block">
   <h3>环量密度的物理意义（21-Q2c）</h3>
-  <p>公式 $(curl F)\cdot n = \lim_{A \to 0} (1/A) \oint_C F\cdotdr$（其中边界 $C$ 围成的面积为 $A$，n 是法向）。</p>
+  <p>公式 $(curl F)\cdot n = \lim_{A \to 0} (1/A) \oint_C F\cdot dr$（其中边界 $C$ 围成的面积为 $A$，n 是法向）。</p>
   <p>这意味着 $(curl F)\cdot n$ 是单位面积上的环量，即「该方向上的旋转密度」。一个扁平的叶片放在流场中，旋转最快的那个方向就是 $curl F$ 的方向。</p>
 </div>
 
@@ -254,7 +254,7 @@ MathJax = {
   </div>
   <div class="step">
     <strong>Stokes 定理（3D 曲面）：</strong> 闭曲线上的环量 = 曲面上 curl 的面积分<br>
-    $\oint_{\partial S} F\cdotdr = \iint_S curl F\cdot n dS$
+    $\oint_{\partial S} F\cdot dr = \iint_S curl F\cdot n dS$
   </div>
   <div class="step">
     <strong>散度定理（3D 体积）：</strong> 闭曲面上的通量 = 体积内 div 的体积分<br>
@@ -342,7 +342,7 @@ MathJax = {
   <h3>本课总结 — 三大定理速记表</h3>
   <ul>
     <li><strong>Green 定理：</strong> $\oint_C Pdx+Qdy = \iint_D (\partial Q/\partial x-\partial P/\partial y) dA$。平面闭曲线环量 → 面积分。</li>
-    <li><strong>Stokes 定理：</strong> $\oint_C F\cdotdr = \iint_S curl F\cdot n dS$。空间闭曲线环量 → 曲面积分。</li>
+    <li><strong>Stokes 定理：</strong> $\oint_C F\cdot dr = \iint_S curl F\cdot n dS$。空间闭曲线环量 → 曲面积分。</li>
     <li><strong>散度定理：</strong> $\oiint_S F\cdot n dS = \iiint_D div F dV$。闭曲面通量 → 体积分。</li>
     <li><strong>保守场判定：</strong> 2D 看 $\partial P/\partial y = \partial Q/\partial x$；3D 看 $curl F = 0$。记得加「单连通」的前提。</li>
     <li><strong>核心恒等式：</strong> $curl(\nabla f) = 0$（梯无旋），$div(curl F) = 0$（旋无散）</li>
