@@ -37,8 +37,8 @@ MathJax = {
 <div class="concept-box">
   <div class="label">动机</div>
   <ul>
-    <li><strong>简化区域描述：</strong> 圆盘 $x^2+y^2 \le a^2$ 在直角坐标下积分限很复杂（含 $\sqrt(a^2−x^2)$），但在极坐标下就是 $0 \le r \le a, 0 \le θ \le 2\pi$——简洁得像矩形！</li>
-    <li><strong>简化被积函数：</strong> $f(x,y) = \sqrt(x^2+y^2)$ 在极坐标下就是 $f = r$；$f(x,y) = e^(x^2+y^2)$ 变成 $e^(r^2)$——大幅降低积分难度。</li>
+    <li><strong>简化区域描述：</strong> 圆盘 $x^2+y^2 \le a^2$ 在直角坐标下积分限很复杂（含 $\sqrt(a^2-x^2)$），但在极坐标下就是 $0 \le r \le a, 0 \le θ \le 2\pi$——简洁得像矩形！</li>
+    <li><strong>简化被积函数：</strong> $f(x,y) = \sqrt(x^2+y^2)$ 在极坐标下就是 $f = r$；$f(x,y) = e^{x^2+y^2}$ 变成 $e^{r^2}$——大幅降低积分难度。</li>
     <li><strong>对称性匹配：</strong> 柱对称问题用柱坐标，球对称问题用球坐标——让积分「自然流动」。</li>
   </ul>
 </div>
@@ -49,7 +49,7 @@ MathJax = {
   <h3>极坐标（<span class="en-term">Polar Coordinates</span>）</h3>
   <div class="step"><strong>变换公式：</strong>
     <p style="text-align:center; font-size:1.1em;">$x = r cos θ, y = r sin θ$</p>
-    <p>其中 $r \ge 0$（到原点的距离），$θ \in (−\pi, \pi]$（幅角）。</p>
+    <p>其中 $r \ge 0$（到原点的距离），$θ \in (-\pi, \pi]$（幅角）。</p>
   </div>
   <div class="step"><strong>逆变换：</strong>
     <p>$r^2 = x^2 + y^2$，$tan θ = y/x$（注意象限！）</p>
@@ -72,7 +72,7 @@ MathJax = {
   <h3>柱坐标（<span class="en-term">Cylindrical Polar Coordinates</span>）</h3>
   <p>顾名思义：xy 平面用极坐标，z 轴保持直角坐标不变。</p>
   <div class="step"><strong>变换：</strong> $x = r cos θ, y = r sin θ, z = z$</div>
-  <div class="step"><strong>范围：</strong> $r \ge 0, θ \in (−\pi, \pi], z \in \mathbb{R}$</div>
+  <div class="step"><strong>范围：</strong> $r \ge 0, θ \in (-\pi, \pi], z \in \mathbb{R}$</div>
   <div class="step"><strong>体积元素：</strong> $dV = r dr dθ dz$</div>
   <div class="step"><strong>适用场景：</strong> 圆柱体、圆锥体、任何绕 z 轴旋转对称的物体</div>
 </div>
@@ -85,7 +85,7 @@ MathJax = {
       $y = ρ sin φ sin θ$，
       $z = ρ cos φ$
     </p>
-    <p>其中 $ρ \ge 0$（到原点的距离），$φ \in [0, \pi]$（与正 z 轴的夹角），$θ \in (−\pi, \pi]$（xy 平面上的幅角）。</p>
+    <p>其中 $ρ \ge 0$（到原点的距离），$φ \in [0, \pi]$（与正 z 轴的夹角），$θ \in (-\pi, \pi]$（xy 平面上的幅角）。</p>
   </div>
   <div class="step"><strong>逆变换：</strong>
     <p>$ρ^2 = x^2 + y^2 + z^2$，$tan θ = y/x$，$tan φ = \sqrt(x^2+y^2) / z$</p>
@@ -106,7 +106,7 @@ MathJax = {
   <div class="def-label">DEFINITION — Jacobian / 雅可比行列式</div>
   <p>Suppose that $x$ and $y$ are functions of two variables $u$ and $v$, whose partial derivatives exist, then the Jacobian of $x = x(u, v)$ and $y = y(u, v)$ with respect to $u$ and $v$ is</p>
   <p style="text-align:center; font-size:1.1em; margin:0.5rem 0;">
-    $\partial(x, y)/\partial(u, v) := |xu  xv; yu  yv| = xu yv − xv yu$.
+    $\partial(x, y)/\partial(u, v) := |xu  xv; yu  yv| = xu yv - xv yu$.
   </p>
   <p>Suppose that $x$, $y$ and $z$ are functions of three variables $u$, $v$ and $w$, whose partial derivatives exist, then the Jacobian of $x = x(u, v, w)$, $y = y(u, v, w)$ and $z = z(u, v, w)$ with respect to $u$, $v$ and $w$ is</p>
   <p style="text-align:center; font-size:1.1em; margin:0.5rem 0;">
@@ -122,7 +122,7 @@ MathJax = {
   </p>
   <p>Moreover, if $D$ is a bounded planar region, $f : D \to \mathbb{R}$, and the Jacobian of $x$ and $y$ with respect to $u$ and $v$ does not change sign in $D$, then</p>
   <p style="text-align:center; font-size:1.15em; margin:0.8rem 0;">
-    $\iintD f dA = \iintD f(x, y) dx dy = \iintD f(x(u,v), y(u,v)) |\partial(x, y)/\partial(u, v)| du dv$.
+    $\iint_D f dA = \iint_D f(x, y) dx dy = \iint_D f(x(u,v), y(u,v)) |\partial(x, y)/\partial(u, v)| du dv$.
   </p>
   <p><strong>必须取绝对值！</strong>因为面积不能是负的——Jacobian 的正负只表示方向（orientation），而我们关心的是缩放比例。</p>
 </div>
@@ -133,10 +133,10 @@ MathJax = {
   <div class="pf-label">验证：</div>
   <p>极坐标变换：$x = r cos θ, y = r sin θ$</p>
   <p>
-    计算偏导数：$x_r = cos θ, x_θ = −r sin θ, y_r = sin θ, y_θ = r cos θ$
+    计算偏导数：$x_r = cos θ, x_θ = -r sin θ, y_r = sin θ, y_θ = r cos θ$
   </p>
   <p>
-    Jacobian = $det ⎡ cos θ  −r sin θ ⎤⎦ = (cos θ)(r cos θ) − (−r sin θ)(sin θ)$<br>
+    Jacobian = $det ⎡ cos θ  -r sin θ ⎤⎦ = (cos θ)(r cos θ) - (-r sin θ)(sin θ)$<br>
     = $r cos^2θ + r sin^2θ = r(cos^2θ + sin^2θ) = r$
   </p>
   <p>
@@ -156,67 +156,67 @@ MathJax = {
 
 <div class="formula-block">
   <h3>例 1：抛物面下的体积</h3>
-  <p>求曲面 $z = 1 − x^2 − y^2$ 与 xy 平面所围成的体积。</p>
-  <div class="step"><strong>Step 1：</strong> 交线：$0 = 1 − x^2 − y^2$，即 $x^2 + y^2 = 1$——单位圆盘。</div>
-  <div class="step"><strong>Step 2：</strong> 换到极坐标：$z = 1 − r^2, dA = r dr dθ, r \in [0,1], θ \in [0,2\pi]$。</div>
+  <p>求曲面 $z = 1 - x^2 - y^2$ 与 xy 平面所围成的体积。</p>
+  <div class="step"><strong>Step 1：</strong> 交线：$0 = 1 - x^2 - y^2$，即 $x^2 + y^2 = 1$——单位圆盘。</div>
+  <div class="step"><strong>Step 2：</strong> 换到极坐标：$z = 1 - r^2, dA = r dr dθ, r \in [0,1], θ \in [0,2\pi]$。</div>
   <div class="step"><strong>Step 3：</strong>
-    $V = \iint (1−r^2) r dr dθ = \int_0^2\pi dθ \cdot \int_0^1 (r − r^3) dr$
+    $V = \iint (1-r^2) r dr dθ = \int_0^{2\pi} dθ \cdot \int_0^1 (r - r^3) dr$
   </div>
   <div class="step"><strong>Step 4：</strong>
-    $\int_0^2\pi dθ = 2\pi$（θ 和 r 是分离的，大大简化！）<br>
-    $\int_0^1 (r−r^3) dr = [r^2/2 − r^4/4]_0^1 = 1/2 − 1/4 = 1/4$
+    $\int_0^{2\pi} dθ = 2\pi$（θ 和 r 是分离的，大大简化！）<br>
+    $\int_0^1 (r-r^3) dr = [r^2/2 - r^4/4]_0^1 = 1/2 - 1/4 = 1/4$
   </div>
   <div class="step"><strong>答：</strong> $V = 2\pi \cdot (1/4) = \pi/2$</div>
 </div>
 
 <div class="formula-block">
   <h3>例 2：著名的 Gauss 积分</h3>
-  <p>证明：$\int_0^\infty e^(−x^2) dx = \sqrt\pi / 2$。</p>
-  <div class="step"><strong>Step 1：</strong> 设 $I = \int_0^\infty e^(−x^2) dx$。这是一个无法直接积分的反常积分。经典技巧：考虑 $I^2$。</div>
-  <div class="step"><strong>Step 2：</strong> $I^2 = (\int_0^\infty e^(−x^2) dx)(\int_0^\infty e^(−y^2) dy) = \int_0^\infty \int_0^\infty e^(−(x^2+y^2)) dx dy$</div>
+  <p>证明：$\int_0^\infty e^{-x^2} dx = \sqrt\pi / 2$。</p>
+  <div class="step"><strong>Step 1：</strong> 设 $I = \int_0^\infty e^{-x^2} dx$。这是一个无法直接积分的反常积分。经典技巧：考虑 $I^2$。</div>
+  <div class="step"><strong>Step 2：</strong> $I^2 = (\int_0^\infty e^{-x^2} dx)(\int_0^\infty e^{-y^2} dy) = \int_0^\infty \int_0^\infty e^{-(x^2+y^2)} dx dy$</div>
   <div class="step"><strong>Step 3：</strong> 换到极坐标（第一象限）：$r \in [0,\infty), θ \in [0,\pi/2]$，$x^2+y^2 = r^2$。
-    <p>$I^2 = \int_0^(\pi/2) \int_0^\infty e^(−r^2) \cdot r dr dθ = (\pi/2) \cdot \int_0^\infty r e^(−r^2) dr$</p>
+    <p>$I^2 = \int_0^{\pi/2} \int_0^\infty e^{-r^2} \cdot r dr dθ = (\pi/2) \cdot \int_0^\infty r e^{-r^2} dr$</p>
   </div>
   <div class="step"><strong>Step 4：</strong> 令 $u = r^2, du = 2r dr$：
-    <p>$\int_0^\infty r e^(−r^2) dr = (1/2) \int_0^\infty e^(−u) du = (1/2) \cdot 1 = 1/2$</p>
+    <p>$\int_0^\infty r e^{-r^2} dr = (1/2) \int_0^\infty e^{-u} du = (1/2) \cdot 1 = 1/2$</p>
   </div>
   <div class="step"><strong>Step 5：</strong> $I^2 = (\pi/2) \times (1/2) = \pi/4$，故 $I = \sqrt\pi/2$。证毕。</div>
 </div>
 
 <div class="formula-block">
   <h3>例 3：圆内区域的极坐标积分</h3>
-  <p>计算 $\iintD \sqrt(x^2+y^2) dA$，其中 $D = {x^2 + y^2 \le 2x}$。</p>
-  <div class="step"><strong>Step 1：</strong> 识别区域：$x^2−2x+y^2 \le 0 \to (x−1)^2+y^2 \le 1$——以 $(1,0)$ 为圆心、半径 1 的圆。</div>
-  <div class="step"><strong>Step 2：</strong> 表达式 $x^2+y^2 \le 2x$ 在极坐标下：$r^2 \le 2r cos θ ⇒ r \le 2 cos θ$。注意 $r \ge 0$，所以要求 $cos θ \ge 0$，即 $θ \in [−\pi/2, \pi/2]$。</div>
+  <p>计算 $\iint_D \sqrt(x^2+y^2) dA$，其中 $D = {x^2 + y^2 \le 2x}$。</p>
+  <div class="step"><strong>Step 1：</strong> 识别区域：$x^2-2x+y^2 \le 0 \to (x-1)^2+y^2 \le 1$——以 $(1,0)$ 为圆心、半径 1 的圆。</div>
+  <div class="step"><strong>Step 2：</strong> 表达式 $x^2+y^2 \le 2x$ 在极坐标下：$r^2 \le 2r cos θ ⇒ r \le 2 cos θ$。注意 $r \ge 0$，所以要求 $cos θ \ge 0$，即 $θ \in [-\pi/2, \pi/2]$。</div>
   <div class="step"><strong>Step 3：</strong> $\sqrt(x^2+y^2) = r$，被积函数变成 $r$。</div>
   <div class="step"><strong>Step 4：</strong>
-    $\iint r \cdot r dr dθ = \int_(−\pi/2)^(\pi/2) \int_0^(2 cos θ) r^2 dr dθ$
+    $\iint r \cdot r dr dθ = \int_{-\pi/2}^{\pi/2} \int_0^{2\cos θ} r^2 dr dθ$
   </div>
   <div class="step"><strong>Step 5：</strong>
-    $\int_0^(2 cos θ) r^2 dr = [r^3/3]_0^(2 cos θ) = (8 cos^3θ)/3$
+    $\int_0^{2\cos θ} r^2 dr = [r^3/3]_0^{2\cos θ} = (8 cos^3θ)/3$
   </div>
   <div class="step"><strong>Step 6：</strong>
-    $\int_(−\pi/2)^(\pi/2) (8 cos^3θ)/3 dθ$。由于 cos³θ 是偶函数，等于 $(16/3) \int_0^(\pi/2) cos^3θ dθ$。<br>
-    $\int cos^3θ dθ = \int cos θ (1−sin^2θ) dθ = sin θ − sin^3θ/3$<br>
-    $(16/3) \times [sin θ − sin^3θ/3]_0^(\pi/2) = (16/3) \times (1 − 1/3 − 0) = (16/3) \times (2/3) = 32/9$
+    $\int_{-\pi/2}^{\pi/2} (8 cos^3θ)/3 dθ$。由于 cos³θ 是偶函数，等于 $(16/3) \int_0^{\pi/2} cos^3θ dθ$。<br>
+    $\int cos^3θ dθ = \int cos θ (1-sin^2θ) dθ = sin θ - sin^3θ/3$<br>
+    $(16/3) \times [sin θ - sin^3θ/3]_0^{\pi/2} = (16/3) \times (1 - 1/3 - 0) = (16/3) \times (2/3) = 32/9$
   </div>
   <div class="step"><strong>答：</strong> $\iint \sqrt(x^2+y^2) dA = 32/9$</div>
 </div>
 
 <div class="formula-block">
   <h3>例 4：圆锥的质量（柱坐标）</h3>
-  <p>求圆锥 $x^2+y^2 \le (1−z)^2, 0 \le z \le 1$ 的质量，密度为 $δ(x,y,z) = z$。</p>
-  <div class="step"><strong>Step 1：</strong> 圆锥顶点在 $(0,0,1)$，底在 xy 平面。截面：固定 z，半径为 $1−z$ 的圆。</div>
-  <div class="step"><strong>Step 2：</strong> 用柱坐标：$r \in [0, 1−z], θ \in [0, 2\pi], z \in [0, 1]$。被积函数 $z$。</div>
+  <p>求圆锥 $x^2+y^2 \le (1-z)^2, 0 \le z \le 1$ 的质量，密度为 $δ(x,y,z) = z$。</p>
+  <div class="step"><strong>Step 1：</strong> 圆锥顶点在 $(0,0,1)$，底在 xy 平面。截面：固定 z，半径为 $1-z$ 的圆。</div>
+  <div class="step"><strong>Step 2：</strong> 用柱坐标：$r \in [0, 1-z], θ \in [0, 2\pi], z \in [0, 1]$。被积函数 $z$。</div>
   <div class="step"><strong>Step 3：</strong>
-    $M = \iiint z \cdot r dr dθ dz = \int_0^1 \int_0^2\pi \int_0^(1−z) z\cdotr dr dθ dz$
+    $M = \iiint z \cdot r dr dθ dz = \int_0^1 \int_0^{2\pi} \int_0^{1-z} z\cdot rdr dθ dz$
   </div>
   <div class="step"><strong>Step 4：</strong>
-    $\int_0^(1−z) z\cdotr dr = z\cdot[r^2/2]_0^(1−z) = z\cdot(1−z)^2/2$
+    $\int_0^{1-z} z\cdot rdr = z\cdot[r^2/2]_0^{1-z} = z\cdot(1-z)^2/2$
   </div>
   <div class="step"><strong>Step 5：</strong>
-    $M = 2\pi \cdot \int_0^1 z(1−z)^2/2 dz = \pi \int_0^1 (z − 2z^2 + z^3) dz$<br>
-    $= \pi [z^2/2 − 2z^3/3 + z^4/4]_0^1 = \pi (1/2 − 2/3 + 1/4) = \pi (6/12 − 8/12 + 3/12) = \pi/12$
+    $M = 2\pi \cdot \int_0^1 z(1-z)^2/2 dz = \pi \int_0^1 (z - 2z^2 + z^3) dz$<br>
+    $= \pi [z^2/2 - 2z^3/3 + z^4/4]_0^1 = \pi (1/2 - 2/3 + 1/4) = \pi (6/12 - 8/12 + 3/12) = \pi/12$
   </div>
   <div class="step"><strong>答：</strong> 质量 $M = \pi/12$</div>
 </div>
@@ -227,20 +227,20 @@ MathJax = {
   <div class="step"><strong>Step 1：</strong> 放置：顶点在原点，底朝上（$z = h$）。圆锥侧面的半顶角 $φ_0 = arctan(a/h)$。</div>
   <div class="step"><strong>Step 2：</strong> 在球坐标中，圆锥 = ${ 0 \le φ \le φ_0, 0 \le θ \le 2\pi, 0 \le ρ \le h/cos φ }$（因为 $z = ρ cos φ \le h$ → $ρ \le h/cos φ$）。</div>
   <div class="step"><strong>Step 3：</strong>
-    $V = \int_0^2\pi \int_0^(φ_0) \int_0^(h/cos φ) ρ^2 sin φ dρ dφ dθ$
+    $V = \int_0^{2\pi} \int_0^{φ_0} \int_0^{h/\cos φ} ρ^2 sin φ dρ dφ dθ$
   </div>
   <div class="step"><strong>Step 4：</strong>
-    $\int_0^(h/cos φ) ρ^2 dρ = (h^3)/(3 cos^3φ)$
+    $\int_0^{h/\cos φ} ρ^2 dρ = (h^3)/(3 cos^3φ)$
   </div>
   <div class="step"><strong>Step 5：</strong>
-    $V = 2\pi \cdot (h^3/3) \cdot \int_0^(φ_0) (sin φ)/(cos^3φ) dφ$<br>
-    令 $u = cos φ, du = −sin φ dφ$：<br>
-    $\int sin φ/cos^3φ dφ = −\int du/u^3 = 1/(2u^2)$<br>
-    在 $φ \in [0, φ_0]$ 上：$1/(2cos^2φ_0) − 1/2$
+    $V = 2\pi \cdot (h^3/3) \cdot \int_0^{φ_0} (sin φ)/(cos^3φ) dφ$<br>
+    令 $u = cos φ, du = -sin φ dφ$：<br>
+    $\int sin φ/cos^3φ dφ = -\int du/u^3 = 1/(2u^2)$<br>
+    在 $φ \in [0, φ_0]$ 上：$1/(2cos^2φ_0) - 1/2$
   </div>
   <div class="step"><strong>Step 6：</strong>
     $cos φ_0 = h/\sqrt(a^2+h^2)$，$cos^2φ_0 = h^2/(a^2+h^2)$<br>
-    $1/(2cos^2φ_0) − 1/2 = (a^2+h^2)/(2h^2) − 1/2 = a^2/(2h^2)$
+    $1/(2cos^2φ_0) - 1/2 = (a^2+h^2)/(2h^2) - 1/2 = a^2/(2h^2)$
   </div>
   <div class="step"><strong>Step 7：</strong>
     $V = 2\pi \cdot (h^3/3) \cdot a^2/(2h^2) = (\pi a^2 h)/3$——经典的圆锥体积公式！
@@ -253,11 +253,11 @@ MathJax = {
 <div class="quiz-block">
   <div class="q-title">Q1：将积分区域 $D = {x^2 + y^2 \le 4, x \ge 0}$ 用极坐标描述，正确的是？</div>
   <div class="option"><span class="wrong">A) r ∈ [0,2], θ ∈ [0, 2π]</span></div>
-  <div class="option"><span class="correct">B) r ∈ [0,2], θ ∈ [−π/2, π/2]</span></div>
+  <div class="option"><span class="correct">B) r ∈ [0,2], θ ∈ [-π/2, π/2]</span></div>
   <div class="option"><span class="wrong">C) r ∈ [0,4], θ ∈ [0, π]</span></div>
   <div class="option"><span class="wrong">D) r ∈ [0,2], θ ∈ [0, π]</span></div>
   <div class="explanation">
-    <strong>解析：</strong> $x^2+y^2 \le 4 \to r \le 2$；$x \ge 0 \to r cos θ \ge 0 \to cos θ \ge 0 \to θ \in [−\pi/2, \pi/2]$。注意 $r$ 是半径的平方（不对，$r^2 = x^2+y^2$），所以 $r^2 \le 4 \to r \le 2$。选 B。
+    <strong>解析：</strong> $x^2+y^2 \le 4 \to r \le 2$；$x \ge 0 \to r cos θ \ge 0 \to cos θ \ge 0 \to θ \in [-\pi/2, \pi/2]$。注意 $r$ 是半径的平方（不对，$r^2 = x^2+y^2$），所以 $r^2 \le 4 \to r \le 2$。选 B。
   </div>
 </div>
 
@@ -290,7 +290,7 @@ MathJax = {
   <div class="option"><span class="correct">C) Jacobian 可能为负（表示方向翻转），但面积/体积必须是正的</span></div>
   <div class="option"><span class="wrong">D) 取绝对值是为了使被积函数保持连续</span></div>
   <div class="explanation">
-    <strong>解析：</strong> Jacobian 行列式的正负表示坐标变换是否保留了方向（<span class="en-term">orientation</span>）。例如 $(x,y) = (v,u)$ 的 Jacobian = −1。但我们关心的是小面积如何缩放，缩放因子总是非负的，所以必须取绝对值。选 C。
+    <strong>解析：</strong> Jacobian 行列式的正负表示坐标变换是否保留了方向（<span class="en-term">orientation</span>）。例如 $(x,y) = (v,u)$ 的 Jacobian = -1。但我们关心的是小面积如何缩放，缩放因子总是非负的，所以必须取绝对值。选 C。
   </div>
 </div>
 
@@ -304,7 +304,7 @@ MathJax = {
     <li><strong>Jacobian 定义：</strong> 坐标变换的偏导数行列式，表示局部面积/体积的缩放因子</li>
     <li><strong>换元公式：</strong> $\iint f dxdy = \iint f\cdot|J| dudv$——必须乘 Jacobian 的绝对值</li>
     <li><strong>策略：</strong> 看到 $x^2+y^2$ → 考虑极坐标/柱坐标；看到 $x^2+y^2+z^2$ → 考虑球坐标</li>
-    <li><strong>Gauss 积分</strong> $\int_0^\infty e^(−x^2) dx = \sqrt\pi/2$ 是经典考点，记住推导方法</li>
+    <li><strong>Gauss 积分</strong> $\int_0^\infty e^{-x^2} dx = \sqrt\pi/2$ 是经典考点，记住推导方法</li>
   </ul>
 </div>
 
