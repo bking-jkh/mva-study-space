@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 5 课：方向导数与梯度 — Directional Derivatives & Gradient</title>
+<link rel="stylesheet" href="../assets/style.css">
+<!-- MathJax -->
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">MVA 课程主页</a>
+  <a href="0004-chain.html">第 4 课：链式法则</a>
+  <a href="0006-tangent.html">第 6 课：切平面与可微性</a>
+</nav>
+
+<h1>第 5 课：方向导数与梯度</h1>
+<p><span class="en-term">Directional Derivatives & Gradient</span></p>
+
+<!-- 引言 -->
+<div class="concept-box">
+  <div class="label">核心思路</div>
+  <p>上一课我们学了偏导数——它们只能告诉你函数沿着坐标轴方向的变化率。但实际中，我们往往想知道函数沿着<strong>任意方向</strong>的变化有多快。比如，站在山腰上，你想知道朝着东北方向走，海拔变化有多快——这就是<span class="en-term">方向导数</span>要解决的问题。而<span class="en-term">梯度</span>则告诉我们哪个方向变化最快。</p>
+</div>
+
+<!-- 目录 -->
+<div class="toc">
+  <ol>
+    <li>方向导数的定义</li>
+    <li>方向导数的基本性质</li>
+    <li>梯度向量</li>
+    <li>核心定理：方向导数与梯度的关系</li>
+    <li>梯度的几何意义</li>
+    <li>考试真题演练</li>
+  </ol>
+</div>
+
+<h2>一、方向导数的定义</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Directional Derivative</div>
+  <p>Let $n \ge 2$ be a natural number, let $R$ be a non-empty open region of $\mathbb{R}^n$, let $\mathbf{x} = (x_1, x_2, \dots, x_n) \in R$ and let $\mathbf{u}$ be a given non-zero vector in $\mathbb{R}^n$. Denoting the unit vector in the direction of $\mathbf{u}$ by $\hat{\mathbf{u}} = \langle u_1, u_2, \dots, u_n \rangle$ and letting $f : R \to \mathbb{R}$, the derivative of $f$ at $\mathbf{x}$ in the direction of $\mathbf{u}$, is the limit</p>
+  <p>$$
+  D_{\mathbf{u}}f(\mathbf{x}) := \lim_{h\to 0} \frac{f(x_1 + hu_1, \dots, x_n + hu_n) - f(x_1, \dots, x_n)}{h},
+  $$</p>
+  <p>provided that the limit exists.</p>
+</div>
+
+<p>换句话说，方向导数 $D_{\hat{\mathbf{u}}}f(\mathbf{a})$ 就是我们从点 $\mathbf{a}$ 出发，沿着方向 $\hat{\mathbf{u}}$ 走的时候，函数值的变化率。你也可以把它理解为：把多元函数限制在过点 $\mathbf{a}$、方向为 $\hat{\mathbf{u}}$ 的直线上，变成一条单变量函数，然后求这个单变量函数的导数。</p>
+
+<div class="formula-block">
+  <p><strong>沿曲线的导数形式</strong></p>
+  <div class="step">定义曲线 $\mathbf{r}(t) = \mathbf{a} + t\hat{\mathbf{u}}$——这是一条过点 $\mathbf{a}$ 的直线</div>
+  <div class="step">则复合函数 $f(\mathbf{r}(t)) = f(\mathbf{a} + t\hat{\mathbf{u}})$ 就是限制在直线上的函数值</div>
+  <div class="step">因此：$D_{\hat{\mathbf{u}}}f(\mathbf{a}) = \left.\frac{d}{dt}f(\mathbf{a} + t\hat{\mathbf{u}})\right|_{t=0}$</div>
+</div>
+
+<p>这个形式非常有用，因为它在后面的链式法则中会反复出现。</p>
+
+<h2>二、方向导数的基本性质</h2>
+
+<div class="thm-box">
+  <div class="thm-label">性质 — Properties</div>
+  <p>方向导数算子满足以下性质（假设极限均存在）：</p>
+  <p>1. <strong>线性性</strong>：$D_{\hat{\mathbf{u}}}(\alpha f + \beta g) = \alpha D_{\hat{\mathbf{u}}}f + \beta D_{\hat{\mathbf{u}}}g$</p>
+  <p>2. <strong>反向对称</strong>：$D_{-\hat{\mathbf{u}}}f = -D_{\hat{\mathbf{u}}}f$——朝相反方向走，变化率变号</p>
+  <p>3. <strong>偏导数是特例</strong>：当 $\hat{\mathbf{u}} = \mathbf{e}_1 = \langle 1, 0, \dots, 0 \rangle$（沿 $x_1$ 轴方向）时，$D_{\mathbf{e}_1}f = \frac{\partial f}{\partial x_1}$</p>
+</div>
+
+<p>注意第三条很重要：偏导数不过是方向导数沿着坐标轴方向的特殊情况。这说明方向导数是偏导数的推广。</p>
+
+<div class="warning">
+  <strong>重要警告！</strong>所有偏导数都存在 <strong>不等于</strong> 所有方向导数都存在。反过来，如果所有方向导数都存在，偏导数一定存在。一个经典反例：$f(x,y) = \frac{xy^2}{x^2+y^4}$（补充 $f(0,0)=0$）。在原点，偏导数 $f_x(0,0) = f_y(0,0) = 0$ 都存在，但沿着某些方向（如 $\hat{\mathbf{u}} = (1,1)/\sqrt{2}$）的方向导数并不存在。
+</div>
+
+<h2>三、梯度向量</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Gradient Vector</div>
+  <p>Let $n \ge 2$ be a natural number, $R \subseteq \mathbb{R}^n$ be non-empty and open, $f : R \to \mathbb{R}$ denote a function of $n$ variables, $x_1, x_2, \dots, x_n$, and $\mathbf{u} = \langle u_1, u_2, \dots, u_n \rangle$ be a unit vector in $\mathbb{R}^n$. Further, suppose that $\mathbf{a} = (a_1, a_2, \dots, a_n) \in R$ and that the partial derivative of $f$ with respect to $x_i$ at $\mathbf{a}$ exists for all $i \in \{1, 2, \dots, n\}$. The gradient vector of $f$ at $\mathbf{a}$ is the vector</p>
+  <p>$$
+  \nabla f(\mathbf{a}) := \frac{\partial f}{\partial x_1}(\mathbf{a})\,\mathbf{x}_1 + \frac{\partial f}{\partial x_2}(\mathbf{a})\,\mathbf{x}_2 + \dots + \frac{\partial f}{\partial x_n}(\mathbf{a})\,\mathbf{x}_n,
+  $$</p>
+  <p>where $\mathbf{x}_1 = \langle 1, 0, 0, \dots, 0 \rangle$, $\mathbf{x}_2 = \langle 0, 1, 0, \dots, 0 \rangle$, $\dots$, $\mathbf{x}_n = \langle 0, 0, \dots, 0, 1 \rangle$ denote the standard unit vectors of $\mathbb{R}^n$.</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">梯度算子的线性性</div>
+  <p>$\nabla$ 是一个线性算子：</p>
+  <p>$$
+  \nabla(\alpha f + \beta g) = \alpha \nabla f + \beta \nabla g
+  $$</p>
+  <p>这直接来自偏导数的线性性。</p>
+</div>
+
+<h2>四、核心定理：方向导数等于梯度与方向向量的点积</h2>
+
+<div class="def-box">
+  <div class="def-label">推论 — Directional Derivatives as Dot Products</div>
+  <p>Let $n \ge 2$ be a natural number, $R \subseteq \mathbb{R}^n$ be non-empty and open, $f : R \to \mathbb{R}$ denote a function of $n$ variables, $x_1, x_2, \dots, x_n$, and $\mathbf{u} = \langle u_1, u_2, \dots, u_n \rangle$ be a unit vector in $\mathbb{R}^n$. Further, suppose that $\mathbf{a} = (a_1, a_2, \dots, a_n) \in R$ and that the partial derivative of $f$ with respect to $x_i$ at $\mathbf{a}$ exists for all $i \in \{1, 2, \dots, n\}$. If $\theta$ is the acute angle between the vectors $\nabla f(\mathbf{a})$ and $\mathbf{u}$, provided that $D_{\mathbf{u}}f(\mathbf{a})$ exists, then</p>
+  <p>$$
+  D_{\mathbf{u}}f(\mathbf{a}) = \nabla f(\mathbf{a}) \cdot \mathbf{u} = |\nabla f(\mathbf{a})||\mathbf{u}| \cos(\theta) = |\nabla f(\mathbf{a})| \cos(\theta) = u_1 f_{x_1}(\mathbf{a}) + u_2 f_{x_2}(\mathbf{a}) + \dots + u_n f_{x_n}(\mathbf{a}).
+  $$</p>
+</div>
+
+<div class="proof-box">
+  <div class="pf-label">证明思路</div>
+  <p>利用全微分的线性近似：$f(\mathbf{a} + h\hat{\mathbf{u}}) \approx f(\mathbf{a}) + \nabla f(\mathbf{a}) \cdot (h\hat{\mathbf{u}})$。代入方向导数的定义：</p>
+  <p>$$
+  D_{\hat{\mathbf{u}}}f(\mathbf{a}) = \lim_{h\to 0} \frac{f(\mathbf{a} + h\hat{\mathbf{u}}) - f(\mathbf{a})}{h} \approx \lim_{h\to 0} \frac{\nabla f(\mathbf{a}) \cdot (h\hat{\mathbf{u}})}{h} = \nabla f(\mathbf{a}) \cdot \hat{\mathbf{u}}
+  $$</p>
+</div>
+
+<div class="concept-box">
+  <div class="label">几何意义</div>
+  <p>从 $D_{\hat{\mathbf{u}}}f = |\nabla f| \cos\theta$ 这个公式，我们可以读出极其丰富的信息：</p>
+  <ul>
+    <li><strong>$\cos\theta = 1$（即 $\hat{\mathbf{u}}$ 平行于 $\nabla f$）</strong>：方向导数取得最大值 $|\nabla f|$。这就是梯度方向——函数增长最快的方向！</li>
+    <li><strong>$\cos\theta = -1$（即 $\hat{\mathbf{u}}$ 反平行于 $\nabla f$）</strong>：方向导数取得最小值 $-|\nabla f|$。这是函数下降最快的方向。</li>
+    <li><strong>$\cos\theta = 0$（即 $\hat{\mathbf{u}}$ 垂直于 $\nabla f$）</strong>：方向导数为零。沿着这些方向走，函数值（在一阶近似下）不变。</li>
+  </ul>
+</div>
+
+<div class="formula-block">
+  <p><strong>总结：梯度的三大身份</strong></p>
+  <div class="step"><strong>身份 1</strong>：$\nabla f(\mathbf{a})$ 的方向是 $f$ 增长最快的方向</div>
+  <div class="step"><strong>身份 2</strong>：$\nabla f(\mathbf{a})$ 的大小 $|\nabla f(\mathbf{a})|$ 是最大方向导数（最大增长率）</div>
+  <div class="step"><strong>身份 3</strong>：$\nabla f(\mathbf{a})$ 垂直于过点 $\mathbf{a}$ 的<span class="en-term">等值面</span>（level surface）$f(\mathbf{x}) = c$</div>
+</div>
+
+<h2>五、梯度是等值线的法向量</h2>
+
+<p>对于 $f: \mathbb{R}^2 \to \mathbb{R}$，方程 $f(x,y) = c$ 定义了一条<span class="en-term">等值线</span>（level curve）。关键结论：<strong>梯度 $\nabla f$ 永远垂直于等值线</strong>。</p>
+
+<div class="proof-box">
+  <div class="pf-label">证明（$n=2$ 情况）</div>
+  <p>设 $\mathbf{r}(t) = (x(t), y(t))$ 是等值线 $f(x,y) = c$ 上的一条参数曲线，满足 $\mathbf{r}(0) = \mathbf{a}$。则对 $t$ 求导：</p>
+  <p>$$
+  \frac{d}{dt}f(x(t), y(t)) = \frac{\partial f}{\partial x}x'(t) + \frac{\partial f}{\partial y}y'(t) = \nabla f \cdot \mathbf{r}'(t) = 0
+  $$</p>
+  <p>在 $t=0$ 处，$\nabla f(\mathbf{a}) \cdot \mathbf{r}'(0) = 0$。而 $\mathbf{r}'(0)$ 是等值线在 $\mathbf{a}$ 处的切向量。所以 $\nabla f(\mathbf{a})$ 垂直于切向量——也就是法向量。</p>
+</div>
+
+<h2>六、切平面——初步介绍</h2>
+
+<p>有了梯度的法向量身份，求切平面就变得非常自然。</p>
+
+<div class="def-box">
+  <div class="def-label">切平面方程 — Tangent Plane Equations</div>
+  <p><strong>形式一：函数图像 $z = f(x,y)$ 的切平面</strong></p>
+  <p>在点 $(a, b, f(a,b))$ 处：</p>
+  <p>$$
+  z - f(a,b) = f_x(a,b)(x - a) + f_y(a,b)(y - b)
+  $$</p>
+  <p><strong>形式二：隐式曲面 $g(x,y,z) = 0$ 的切平面</strong></p>
+  <p>在点 $(a,b,c)$ 处（满足 $g(a,b,c) = 0$）：</p>
+  <p>$$
+  \nabla g(a,b,c) \cdot \langle x-a, y-b, z-c \rangle = 0
+  $$</p>
+  <p>即 $g_x(a,b,c)(x-a) + g_y(a,b,c)(y-b) + g_z(a,b,c)(z-c) = 0$。</p>
+</div>
+
+<h2>七、典型例题</h2>
+
+<div class="formula-block">
+  <p><strong>例题 1：求 $f(x,y) = x^2 + y^2$ 在点 $(4, 2)$ 的梯度</strong></p>
+  <div class="step"><strong>Step 1</strong>：计算偏导数。$f_x = 2x$，$f_y = 2y$。</div>
+  <div class="step"><strong>Step 2</strong>：代入点 $(4,2)$。$\nabla f(4,2) = \langle 2\cdot 4, 2\cdot 2 \rangle = \langle 8, 4 \rangle$。</div>
+  <div class="step"><strong>Step 3</strong>：几何解读。在 $(4,2)$ 处，函数增长最快的方向是 $\langle 8, 4 \rangle$（即方向 $\langle 2, 1 \rangle$），最大增长率是 $|\langle 8,4 \rangle| = \sqrt{64+16} = \sqrt{80} = 4\sqrt{5}$。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 2：求 $f(x,y) = x^2 + y^2$ 在点 $(4,2)$ 处沿 $\hat{\mathbf{u}} = \langle 1, 2 \rangle / \sqrt{5}$ 的方向导数</strong></p>
+  <div class="step"><strong>Step 1</strong>：验证 $\hat{\mathbf{u}}$ 是单位向量。$|\hat{\mathbf{u}}| = \sqrt{1^2+2^2}/\sqrt{5} = 1$ ✓。</div>
+  <div class="step"><strong>Step 2</strong>：使用公式 $D_{\hat{\mathbf{u}}}f = \nabla f \cdot \hat{\mathbf{u}}$。已求得 $\nabla f = \langle 8, 4 \rangle$。</div>
+  <div class="step"><strong>Step 3</strong>：$D_{\hat{\mathbf{u}}}f = \langle 8, 4 \rangle \cdot \langle 1, 2 \rangle / \sqrt{5} = (8\cdot 1 + 4\cdot 2) / \sqrt{5} = 16 / \sqrt{5}$。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 3：求曲面 $x^2 + y^2 + z^2 = 9$ 在点 $(2, 2, 1)$ 处的切平面</strong></p>
+  <div class="step"><strong>Step 1</strong>：设 $g(x,y,z) = x^2 + y^2 + z^2 - 9 = 0$。验证 $(2,2,1)$ 在曲面上：$4+4+1=9$ ✓。</div>
+  <div class="step"><strong>Step 2</strong>：$\nabla g = \langle 2x, 2y, 2z \rangle$。在 $(2,2,1)$ 处：$\nabla g = \langle 4, 4, 2 \rangle$。</div>
+  <div class="step"><strong>Step 3</strong>：切平面方程：$4(x-2) + 4(y-2) + 2(z-1) = 0$。化简得 $2x + 2y + z = 9$。</div>
+</div>
+
+<h2>八、考试真题</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1：<span class="exam-tag">19-Q1</span> 设 $f(x,y) = x^3 + y^3 - 3xy$。求 $f$ 在点 $(1,1)$ 处沿方向 $\hat{\mathbf{u}} = \langle 3, 4 \rangle / 5$ 的方向导数。</div>
+  <div class="option"><strong>A.</strong> $-3/5$</div>
+  <div class="option correct"><strong>B.</strong> $0$</div>
+  <div class="option"><strong>C.</strong> $3/5$</div>
+  <div class="option"><strong>D.</strong> $6/5$</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>$\nabla f = \langle 3x^2 - 3y, 3y^2 - 3x \rangle$。在 $(1,1)$ 处：$\nabla f(1,1) = \langle 3-3, 3-3 \rangle = \langle 0, 0 \rangle$。因此 $D_{\hat{\mathbf{u}}}f(1,1) = \langle 0,0 \rangle \cdot \langle 3/5, 4/5 \rangle = 0$。</p>
+    <p>注意：$(1,1)$ 刚好是一个临界点（stationary point），所以任何方向导数都是零——这和我们学过的理论完全一致！</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2：<span class="exam-tag">19-Q3</span> 曲面 $z = f(x,y)$ 在点 $(a,b,f(a,b))$ 处的切平面方程是什么？</div>
+  <div class="option"><strong>A.</strong> $f_x(a,b)(x-a) + f_y(a,b)(y-b) + (z - f(a,b)) = 0$</div>
+  <div class="option"><strong>B.</strong> $z = f_x(a,b)x + f_y(a,b)y + f(a,b)$</div>
+  <div class="option correct"><strong>C.</strong> $z - f(a,b) = f_x(a,b)(x-a) + f_y(a,b)(y-b)$</div>
+  <div class="option"><strong>D.</strong> $z = f_x(a,b)(x-a) + f_y(a,b)(y-b)$</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：C</span></p>
+    <p>这是函数图像切平面的标准公式。A 选项的符号不对——如果写成 $f_x(x-a) + f_y(y-b) - (z-f) = 0$ 才正确。B 是线性近似但不是切平面（缺少了 $-a$ 和 $-b$ 的偏移）。D 漏掉了 $f(a,b)$。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3：<span class="exam-tag">21-Q1a</span> 对于函数 $f(x,y) = \ln(x^2 + y^2)$，在点 $(1,0)$ 处，梯度 $\nabla f$ 的方向是什么？</div>
+  <div class="option correct"><strong>A.</strong> 沿 $x$ 轴正方向</div>
+  <div class="option"><strong>B.</strong> 沿 $y$ 轴正方向</div>
+  <div class="option"><strong>C.</strong> 沿 $x$ 轴负方向</div>
+  <div class="option"><strong>D.</strong> 指向原点</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：A</span></p>
+    <p>$\nabla f = \langle \frac{2x}{x^2+y^2}, \frac{2y}{x^2+y^2} \rangle$。在 $(1,0)$ 处：$\nabla f(1,0) = \langle 2, 0 \rangle$。方向是 $\langle 1, 0 \rangle$，即沿 $x$ 轴正方向。</p>
+    <p>注意：等值线在此处是圆 $x^2+y^2=1$（过点 $(1,0)$ 的圆），梯度方向 $\langle 2,0 \rangle$ 确实是圆的法向量（径向向外）。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4：<span class="exam-tag">25-Q1a-iii</span> 关于梯度与等值面的关系，以下哪个说法正确？</div>
+  <div class="option"><strong>A.</strong> 梯度方向总是沿着等值面的切平面方向</div>
+  <div class="option"><strong>B.</strong> 梯度始终垂直于等值面，且指向函数值减小的方向</div>
+  <div class="option correct"><strong>C.</strong> 梯度始终垂直于等值面，且指向函数值增加的方向</div>
+  <div class="option"><strong>D.</strong> 梯度方向可以是任意方向</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：C</span></p>
+    <p>这是梯度的几何本质：$\nabla f$ 垂直于等值面（因为沿等值面的方向导数为零），并且指向 $f$ 增加的方向（因为沿 $\nabla f$ 方向的方向导数 $= |\nabla f| > 0$）。</p>
+    <p>A 完全说反了。B 的方向也反了——梯度指向<strong>增加</strong>的方向，而非减小的方向。</p>
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课小结</h3>
+  <ul>
+    <li><strong>方向导数</strong> $D_{\hat{\mathbf{u}}}f(\mathbf{a}) = \lim_{h\to 0} \frac{f(\mathbf{a}+h\hat{\mathbf{u}})-f(\mathbf{a})}{h}$，衡量函数沿任意方向的变化率</li>
+    <li>方向导数满足线性性 $D_{\hat{\mathbf{u}}}(\alpha f + \beta g) = \alpha D_{\hat{\mathbf{u}}}f + \beta D_{\hat{\mathbf{u}}}g$</li>
+    <li><strong>梯度</strong> $\nabla f(\mathbf{a}) = \langle f_{x_1}, \dots, f_{x_n} \rangle$ 是一个向量，指向函数增长最快的方向</li>
+    <li><strong>核心公式</strong> $D_{\hat{\mathbf{u}}}f(\mathbf{a}) = \nabla f(\mathbf{a}) \cdot \hat{\mathbf{u}} = |\nabla f| \cos\theta$</li>
+    <li>$\cos\theta = 1$：方向导数最大 $= |\nabla f|$（梯度方向）</li>
+    <li>$\cos\theta = -1$：方向导数最小 $= -|\nabla f|$（梯度反方向）</li>
+    <li>$\cos\theta = 0$：方向导数为零（垂直于梯度）</li>
+    <li>梯度 $\nabla f$ 始终垂直于等值面/等值线</li>
+    <li><strong>切平面方程</strong>：$z - f(a,b) = f_x(a,b)(x-a) + f_y(a,b)(y-b)$（显式）或 $\nabla g \cdot \langle x-a, y-b, z-c \rangle = 0$（隐式）</li>
+    <li>所有偏导数存在 $\neq$ 方向导数存在（反例：$f(x,y) = xy^2/(x^2+y^4)$）</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">有问题？</div>
+  <p>如果你对方向导数与梯度的关系还有疑问，或者想让我帮你演算某个具体例子，随时问我！考试中 $D_{\hat{\mathbf{u}}}f = \nabla f \cdot \hat{\mathbf{u}}$ 是必考公式，一定要滚瓜烂熟。</p>
+</div>
+
+</body>
+</html>

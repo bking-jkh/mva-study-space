@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 9 课：多重积分 — Multiple Integrals &amp; Fubini-Tonelli</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">首页</a>
+  <a href="0008-lagrange.html">上一课：Lagrange 乘子法</a>
+  <a href="0010-coordinates.html">下一课</a>
+</nav>
+
+<h1>第 9 课：多重积分 — <span class="en-term">Multiple Integrals</span> &amp; Fubini-Tonelli</h1>
+
+<div class="def-box">
+  <div class="def-label">DEFINITION — Double Integral / 二重积分</div>
+  <p>We say a function $f$ of two variables $x$ and $y$ is integrable over a rectangular region $D$ and has double integral $I = \iintD f dA = \iintD f(x, y) dA$ provided that $D$ is contained in the domain of $f$, and for every positive real number $ε$, there exists a real number $δ$ such that $|R(f, P) − I| < ε$ for every partition $P$ of $D$ satisfying $|P| < δ$ and for all choices of points $(x*ij, y*ij)$ in the sub-rectangles of $P$.</p>
+</div>
+
+<h2>1. 矩形区域上的二重积分</h2>
+
+<div class="concept-box">
+  <div class="label">直觉理解</div>
+  <p>假设你有一块矩形底板 $D = [a,b] \times [c,d]$，上面盖着一个曲面 $z = f(x,y)$。你想求这个物体（底板与曲面之间的部分）的体积。怎么做？</p>
+  <p>把底板切成许多小矩形片，每一片上近似看作一个细长的柱子，柱子的体积 = 底面积 × 高度（$f$ 在某点的值）。把所有小柱子加起来，取极限，就是二重积分。</p>
+</div>
+
+<div class="formula-block">
+  <h3>矩形区域上的剖分与 Riemann 和</h3>
+  <div class="step">
+    <strong>Step 1 — 剖分：</strong> 把 $[a,b]$ 分成 $n$ 个子区间，$[c,d]$ 分成 $m$ 个子区间。这样就得到了 $n\timesm$ 个小矩形 $R_i_j$。
+  </div>
+  <div class="step">
+    <strong>Step 2 — 面积元素：</strong> 每个小矩形的面积记为 $ΔA_i_j = Δx_i \times Δy_j$。这就是所谓的「面积元素」（<span class="en-term">area element</span>）。
+  </div>
+  <div class="step">
+    <strong>Step 3 — Riemann 和：</strong> 在每个小矩形 $R_i_j$ 内选一个样本点 $(x*_i_j, y*_i_j)$，构造：
+    <p style="text-align:center; font-size:1.1em; margin:0.5rem 0;">
+      $R(f, P) = Σ_i Σ_j f(x*_i_j, y*_i_j) \cdot ΔA_i_j$
+    </p>
+  </div>
+  <div class="step">
+    <strong>Step 4 — 剖分的范数：</strong> 定义一个剖分的「范数」（<span class="en-term">norm of partition</span>）为所有小矩形的最大直径：
+    <p style="text-align:center; font-size:1.1em; margin:0.5rem 0;">
+      $|P| = max{ diam(R_i_j) }$
+    </p>
+    其中 $diam(R_i_j) = \sqrt[(Δx_i)^2 + (Δy_j)^2]$（对角线长度）。
+  </div>
+  <div class="step">
+    <strong>Step 5 — 二重积分的定义：</strong>
+    <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">
+      $\iintD f(x,y) dA = lim|P|\to0 Σ_i Σ_j f(x*_i_j, y*_i_j) ΔA_i_j$
+    </p>
+    如果这个极限存在（且与剖分方式和样本点选法无关），就称 $f$ 在 $D$ 上 Riemann 可积。
+  </div>
+</div>
+
+<div class="warning">
+  <strong>重要注意事项：</strong> 为什么剖分的范数必须用「直径」的最大值，而不能只用 $max Δx_i$ 或 $max Δy_j$？
+  <br><br>
+  反例：假设你把一个矩形剖分成 $n\timesn$ 个小矩形，然后让 $Δx \to 0$ 但 $Δy$ 保持不变（即只在一个方向上越分越细）。此时 $max Δx_i \to 0$ 但小矩形的直径并不会趋近于零（因为 $Δy$ 还是那么大）。这样得到的极限值不是真正的二重积分——因为有些方向上的变化没有被捕捉到。换句话说，你必须保证二维平面上的每个方向都被「充分细分」了，这才能保证 Riemann 和的极限正确。
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">THEOREM</div>
+  <p>如果 $f$ 在闭有界矩形 $D$ 上连续且分段光滑（或只有有限个间断点），那么 $f$ 在 $D$ 上 Riemann 可积。换句话说，<strong>连续 + 有界区域 → 可积</strong>。</p>
+</div>
+
+<h2>2. 非矩形区域上的二重积分</h2>
+
+<div class="concept-box">
+  <div class="label">核心思想</div>
+  <p>如果积分区域 $D$ 不是矩形怎么办？简单——用一个足够大的矩形 $R$ 把 $D$ 包起来，然后把 $f$ 在 $D$ 外的值定义为 $0$。剖分时只对完全落在 $D$ 内的子矩形求和即可。</p>
+</div>
+
+<div class="def-box">
+  <div class="def-label">DEFINITION</div>
+  <p>设 $D \subset \mathbb{R}^2$ 为有界区域，$R$ 为包含 $D$ 的矩形。定义延拓函数：</p>
+  <p style="text-align:center; font-size:1.1em;">f̃(x,y) = f(x,y) 当 (x,y) ∈ D，否则 f̃(x,y) = 0</p>
+  <p>则 $\iintD f dA := \iintR f̃ dA$，前提是后者存在。</p>
+</div>
+
+<h2>3. 三重积分</h2>
+
+<p>三重积分是二重积分的自然推广：把立方体（<span class="en-term">cuboid</span>）$[a,b]\times[c,d]\times[e,f]$ 剖分成小块，每块体积 $ΔV_i_j_k = Δx_i \times Δy_j \times Δz_k$，构造 Riemann 和然后取极限：</p>
+
+<div class="formula-block">
+  <p style="text-align:center; font-size:1.15em;">
+    $\iiintD f(x,y,z) dV = lim|P|\to0 Σ_i Σ_j Σ_k f(x*_i_j_k, y*_i_j_k, z*_i_j_k) ΔV_i_j_k$
+  </p>
+</div>
+
+<p>对于一般区域，同样采用「外包矩形 + 延拓为 0」的策略。</p>
+
+<div class="concept-box">
+  <div class="label">几何解释</div>
+  <ul>
+    <li><strong>二重积分（$f \ge 0$）：</strong> 曲面 $z = f(x,y)$ 下方的体积（<span class="en-term">volume under surface</span>）</li>
+    <li><strong>三重积分（$f \ge 0$）：</strong> 如果 $f$ 代表密度函数，则是物体的总质量（<span class="en-term">mass</span>）；如果 $f = 1$，则是体积</li>
+    <li><strong>二重积分 $\iint 1 dA = Area(D)$</strong></li>
+    <li><strong>三重积分 $\iiint 1 dV = Volume(S)$</strong></li>
+  </ul>
+</div>
+
+<h2>4. 多重积分的性质</h2>
+
+<div class="formula-block">
+  <div class="step"><strong>线性性：</strong> $\iint (αf + βg) dA = α\iint f dA + β\iint g dA$</div>
+  <div class="step"><strong>区域可加性：</strong> 若 $D = D_1 \cup D_2$ 且 D₁ ∩ D₂ 面积为 0，则 $\iintD f = \iintD_1 f + \iintD_2 f$</div>
+  <div class="step"><strong>单调性：</strong> 若 $f \le g$ 在 D 上，则 $\iintD f \le \iintD g$</div>
+  <div class="step"><strong>绝对值不等式：</strong> $|\iintD f dA| \le \iintD |f| dA$</div>
+</div>
+
+<h2>5. 累次积分与 Fubini-Tonelli 定理</h2>
+
+<div class="concept-box">
+  <div class="label">关键突破</div>
+  <p>直接用 Riemann 和计算二重积分几乎不可行。但有一个强大的定理告诉我们：二重积分可以化为两次一维积分来算——这就是 <strong>Fubini 定理</strong>的精髓。</p>
+</div>
+
+<p>考虑两种天然的区域类型：</p>
+
+<div class="formula-block">
+  <h3>Type I 区域（<span class="en-term">x-simple</span>）</h3>
+  <p>区域可以用两条「上下边界」搭起来：$D = { (x,y) : a \le x \le b, g(x) \le y \le h(x) }$</p>
+  <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">
+    $\iintD f dA = \inta^{b} [\intg(x)^{h(x)} f(x,y) dy] dx$
+  </p>
+  <p>先对 $y$ 积分（把 $x$ 当作常数），再对 $x$ 积分。</p>
+</div>
+
+<div class="formula-block">
+  <h3>Type II 区域（<span class="en-term">y-simple</span>）</h3>
+  <p>区域可以用两条「左右边界」围起来：$D = { (x,y) : c \le y \le d, g(y) \le x \le h(y) }$</p>
+  <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">
+    $\iintD f dA = \intc^{d} [\intg(y)^{h(y)} f(x,y) dx] dy$
+  </p>
+  <p>先对 $x$ 积分，再对 $y$ 积分。</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">FUBINI-TONELLI THEOREM</div>
+  <p>Let $D$ denote a region of $\mathbb{R}^2$ and let $f$ denote a real-valued function of two variables $x$ and $y$, with domain $D$. If one of $\iintD |f(x, y)| dA$, $\iintD (\int|f(x, y)| dx) dy$, $\iintD (\int|f(x,y)| dy) dx$ exists, then</p>
+  <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">
+    $\iintD f(x, y) dA = \iintD (\int f(x, y) dx) dy = \iintD (\int f(x, y) dy) dx$.
+  </p>
+  <p>换句话说，<strong>只要 $|f|$ 的积分有限，积分顺序可以随意交换</strong>。这意味着你可以挑那个更容易算的顺序来做！</p>
+</div>
+
+<div class="warning">
+  <strong>小心：</strong> Fubini 定理要求「$\iint |f|$ 有限」这个条件。有些病态函数分开做累次积分能得到一个值，但二重积分本身并不存在——这种情况下交换积分顺序可能会得到不同的结果。考试中一般遇到的都是连续函数，所以不会出问题，但记住这个前提条件很重要。
+</div>
+
+<h2>6. 例题精讲</h2>
+
+<div class="formula-block">
+  <h3>例 1：矩形区域上的二重积分</h3>
+  <p>计算 $\iintD x^2y^2 dA$，其中 $D = [0,3] \times [1,2]$。</p>
+  <div class="step"><strong>Step 1：</strong> 因为是矩形，直接用 Fubini 定理——积分顺序任意。</div>
+  <div class="step"><strong>Step 2：</strong> 先对 y 积分（把 x 当作常数）：
+    <p>$\int_1^2 x^2y^2 dy = x^2 \cdot [y^3/3]_1^2 = x^2 \cdot (8/3 − 1/3) = (7/3)x^2$</p>
+  </div>
+  <div class="step"><strong>Step 3：</strong> 再对 x 积分：
+    <p>$\int_0^3 (7/3)x^2 dx = (7/3) \cdot [x^3/3]_0^3 = (7/3) \cdot 9 = 21$</p>
+  </div>
+  <div class="step"><strong>答：</strong> $\iintD x^2y^2 dA = 21$</div>
+</div>
+
+<div class="formula-block">
+  <h3>例 2：三角形区域上的二重积分</h3>
+  <p>计算 $\iintD x^2y^2 dA$，其中 $D = { (x,y) : 0 \le x \le y, 1 \le y \le 2 }$。</p>
+  <div class="step"><strong>Step 1：</strong> 先画出区域。这是一个梯形区域：对每个固定的 $y \in [1,2]$，$x$ 从 $0$ 到 $y$。</div>
+  <div class="step"><strong>Step 2：</strong> 把它看作 Type II 区域（y-simple）：固定 y，先对 x 积分。
+    <p>$\int_0ʸ x^2y^2 dx = y^2 \cdot [x^3/3]_0ʸ = y^2 \cdot y^3/3 = y^5/3$</p>
+  </div>
+  <div class="step"><strong>Step 3：</strong> 再对 y 积分：
+    <p>$\int_1^2 (y^5/3) dy = (1/3) \cdot [y^6/6]_1^2 = (1/3) \cdot (64/6 − 1/6) = (1/3) \cdot (63/6) = 63/18 = 7/2$</p>
+  </div>
+  <div class="step"><strong>答：</strong> $\iintD x^2y^2 dA = 7/2$</div>
+</div>
+
+<div class="formula-block">
+  <h3>例 3：四面体的体积</h3>
+  <p>计算 $\iiintD 1 dV$，其中 $D = { (x,y,z) : x+y+z \le 1, x,y,z \ge 0 }$。</p>
+  <div class="step"><strong>Step 1：</strong> 这是一个四面体（<span class="en-term">tetrahedron</span>），底在 xy 平面，第四个顶点在 $(0,0,1)$。</div>
+  <div class="step"><strong>Step 2：</strong> 对每个固定的 $(x,y)$，$z$ 从 $0$ 到 $1−x−y$。所以先对 z 积分：
+    <p>$\iiint 1 dV = \iintD_xᵧ (\int_0^(1−x−y) 1 dz) dxdy = \iintD_xᵧ (1−x−y) dxdy$</p>
+    <p>其中 $D_xᵧ$ 是 xy 平面上的三角形 $x+y \le 1, x,y \ge 0$。</p>
+  </div>
+  <div class="step"><strong>Step 3：</strong> 对 $y$ 积分（固定 x，y 从 0 到 1−x）：
+    <p>$\int_0^(1−x) (1−x−y) dy = [(1−x)y − y^2/2]_0^(1−x) = (1−x)(1−x) − (1−x)^2/2 = (1−x)^2/2$</p>
+  </div>
+  <div class="step"><strong>Step 4：</strong> 最后对 $x$ 积分：
+    <p>$\int_0^1 (1−x)^2/2 dx = (1/2) \cdot [−(1−x)^3/3]_0^1 = (1/2) \cdot (0 − (−1/3)) = 1/6$</p>
+  </div>
+  <div class="step"><strong>答：</strong> 体积 = $1/6$。验证：四面体体积公式 $V = (1/3)\times底面积\times高 = (1/3)\times(1/2)\times1 = 1/6$，吻合！</div>
+</div>
+
+<h2>7. 无界区域上的积分</h2>
+
+<div class="concept-box">
+  <div class="label">极限方法</div>
+  <p>如果积分区域是无界的（比如整个第一象限），或者被积函数在某点有瑕点（<span class="en-term">improper integral</span>），我们采取跟单变量一样的方法：在有界区域上做积分，然后取极限。例如：</p>
+  <p style="text-align:center; font-size:1.1em;">
+    若 $D = \mathbb{R}^2^+$，则 $\iintD f = limR\to\infty \iintD\capB(0,R) f$
+  </p>
+</div>
+
+<!-- QUIZ SECTION -->
+<h2>课后测验</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1：计算二重积分 $\iintD (x + 2y) dA$，其中 $D = [0,1] \times [0,2]$。</div>
+  <div class="option"><span class="wrong">A) 3</span></div>
+  <div class="option"><span class="correct">B) 5</span></div>
+  <div class="option"><span class="wrong">C) 7</span></div>
+  <div class="option"><span class="wrong">D) 9</span></div>
+  <div class="explanation">
+    <strong>解析：</strong> 用 Fubini 定理，先对 y 积分：<br>
+    $\int_0^2 (x+2y) dy = [xy + y^2]_0^2 = 2x + 4$<br>
+    再对 x 积分：$\int_0^1 (2x+4) dx = [x^2 + 4x]_0^1 = 1 + 4 = 5$。选 B。
+    <br>（也可以先对 x 积分，结果一样。）
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2：设 $D = { (x,y) : 0 \le x \le 1, 0 \le y \le \sqrtx }$，积分 $\iintD f(x,y) dA$ 的 Type I 累次积分形式是？</div>
+  <div class="option"><span class="correct">A) ∫₀¹ ∫₀^(√x) f(x,y) dy dx</span></div>
+  <div class="option"><span class="wrong">B) ∫₀¹ ∫₀ʸ f(x,y) dx dy</span></div>
+  <div class="option"><span class="wrong">C) ∫₀¹ ∫₀¹ f(x,y) dy dx</span></div>
+  <div class="option"><span class="wrong">D) ∫₀¹ ∫ₓ¹ f(x,y) dy dx</span></div>
+  <div class="explanation">
+    <strong>解析：</strong> Type I（x-simple）的意思是先对 y 积分。给定 $x \in [0,1]$，y 的范围是 $0 \le y \le \sqrtx$。所以是 $\int_0^1 \int_0^(\sqrtx) f(x,y) dy dx$。如果换成 Type II，需要反解：$y \in [0,1]$，$x \in [y^2, 1]$，即 $\int_0^1 \int_(y^2)^1 f(x,y) dx dy$。选 A。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3：Fubini 定理告诉我们，二重积分等于累次积分的前提条件是？</div>
+  <div class="option"><span class="wrong">A) f 必须连续且区域必须是矩形</span></div>
+  <div class="option"><span class="wrong">B) 没有任何前提条件，总是可以交换顺序</span></div>
+  <div class="option"><span class="correct">C) f 的绝对值的二重积分必须有限（即 f 绝对可积）</span></div>
+  <div class="option"><span class="wrong">D) f 必须是多项式函数</span></div>
+  <div class="explanation">
+    <strong>解析：</strong> Fubini-Tonelli 定理的核心条件是 $\iint |f| dA < \infty$（绝对可积性）。对于连续函数在有界区域上，这个条件自动满足，所以考试中通常可以直接用。但如果函数有无界间断点或区域无界，就必须先验证这个条件。选 C。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4：体积积分 $\iiintD 1 dV$ 等于以下哪一项？</div>
+  <div class="option"><span class="wrong">A) 曲面 D 的表面积</span></div>
+  <div class="option"><span class="wrong">B) D 的边界长度</span></div>
+  <div class="option"><span class="correct">C) D 的体积</span></div>
+  <div class="option"><span class="wrong">D) D 的直径</span></div>
+  <div class="explanation">
+    <strong>解析：</strong> 这是三重积分最简单也最重要的性质之一：$\iiintD 1 dV = Volume(D)$。类似地，$\iintD 1 dA = Area(D)$。考试中经常用这个性质来验证计算结果。选 C。
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-box">
+  <h3>本课总结</h3>
+  <ul>
+    <li><strong>多重积分的定义</strong>是单变量 Riemann 积分的自然推广：剖分 → Riemann 和 → 取极限（剖分范数 → 0）</li>
+    <li><strong>剖分的范数</strong>必须用最大直径，不能只用最大 Δx 或 Δy——否则可能漏掉某些方向的变化</li>
+    <li><strong>连续函数在有界区域上一定可积</strong>（这个条件在考试中几乎总是满足的）</li>
+    <li><strong>Fubini 定理</strong>是实现计算的核心工具：二重积分 = 两次一维积分，顺序可以按方便来选</li>
+    <li><strong>Type I 区域</strong>是先 y 后 x，<strong>Type II 区域</strong>是先 x 后 y——根据区域的几何形状选择合适的类型</li>
+    <li><strong>三重积分的逻辑完全一样</strong>，只是多了一层嵌套</li>
+    <li>$\iint 1 dA = Area(D)$，$\iiint 1 dV = Volume(S)$——两条必记性质</li>
+  </ul>
+</div>
+
+<div class="exam-tag">19-Q9a</div>
+<div class="exam-tag">21-Q1c</div>
+<div class="exam-tag">22-Q1b</div>
+<div class="exam-tag">22-Q1c</div>
+<div class="exam-tag">23-Q3b</div>
+<div class="exam-tag">24-Q3cd</div>
+<div class="exam-tag">25-Q4</div>
+
+<div class="ask-agent">
+  <div class="label">碰到问题了？</div>
+  <p>如果你对「积分区域类型判断」、「积分顺序交换」、「累次积分配限」等有任何疑问，可以直接问我。可以试试这样问：</p>
+  <ul>
+    <li><em>"这个区域应该用 Type I 还是 Type II 来积分？"</em></li>
+    <li><em>"帮我确认一下这道题的积分限对不对"</em></li>
+    <li><em>"请解释一下 Fubini 定理的前提条件"</em></li>
+  </ul>
+</div>
+
+</body>
+</html>

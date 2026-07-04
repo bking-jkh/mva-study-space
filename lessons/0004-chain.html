@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 4 课：链式法则与隐函数求导 — MVA</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">目 录</a>
+  <a href="0003-partial.html">← 上一课：偏导数</a>
+  <a href="0005-directional.html">下一课：方向导数 →</a>
+</nav>
+
+<h1>第 4 课：链式法则与隐函数求导</h1>
+<h2><span class="en-term">Chain Rule &amp; Implicit Differentiation</span></h2>
+
+<div class="concept-box">
+  <div class="label">核心洞察</div>
+  <p>链式法则是整个 MVA 中<strong>使用频率最高</strong>的技巧。它告诉你：当函数的自变量本身也是函数时，导数怎么顺着"依赖链"传递下去。一旦掌握，隐函数求导、变量替换、偏微分方程求解都是它的自然延伸。</p>
+</div>
+
+<h2>0. 热身：一元链式法则</h2>
+
+<p>先回忆老朋友：</p>
+
+<div class="formula-block">
+  <div class="step"><strong>一元链式法则：</strong><br>
+  若 $h(x) = u(v(x))$，则<br>
+  $h'(x) = u'(v(x)) \cdot v'(x)$<br>
+  或者写成 $dh/dx = (du/dv)(dv/dx)$。</div>
+</div>
+
+<p>多元的推广遵循同样的直觉："总变化率 = 沿着每条路径的变化率之和"。</p>
+
+<h2>1. 简单情形：自变量只有一个</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — 链式法则（最简单情形）</div>
+  <p>设 $f(u,v)$ 是二元函数，而 $u = u(t)$ 和 $v = v(t)$ 都是一元函数。那么复合函数 $F(t) = f(u(t), v(t))$ 的导数为：</p>
+  <p style="text-align:center; font-size:1.1em;">
+    $dF/dt = (\partialf/\partialu)(du/dt) + (\partialf/\partialv)(dv/dt)$
+  </p>
+</div>
+
+<p>用中文说：把 $f$ 对每个自变量求偏导，乘以那个自变量对 $t$ 的导数，然后全部加起来。</p>
+
+<div class="concept-box">
+  <div class="label">树图法（<span class="en-term">Tree Diagram</span>）</div>
+  <p>画一棵"依赖树"可以帮你理清思路：</p>
+  <pre style="font-family:monospace; margin:0.5rem 0;">
+    f
+   / \
+  u   v
+  |   |
+  t   t
+  </pre>
+  <p>从 $f$ 到 $t$ 有两条路径：f &rarr; u &rarr; t 和 f &rarr; v &rarr; t。每条路径上相乘，然后路径之间相加。这就是链式法则的直观：<strong>所有路径贡献之和</strong>。</p>
+</div>
+
+<h2>2. 一般链式法则</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — Chain Rule</div>
+  <p>Let $m$ and $n$ denote two natural numbers. Suppose that $f$ is a function of $n$ real variables, $x_1, x_2, ..., x_n$, with continuous partial derivative with respect to $x_i$ throughout a non-empty open region $R \subseteq \mathbb{R}^n$, for all $i \in {1, 2, ..., n}$, each $x_j$ is a function of $m$ real variables, $t_1, t_2, ..., t_m$, with continuous partial derivative with respect to $t_i$ throughout a non-empty open set $D \subseteq \mathbb{R}ᵐ$, for all $i \in {1, 2, ..., m}$, and ${(x_1(t_1,...,t_m), ..., x_n(t_1,...,t_m)) \in \mathbb{R}^n : (t_1,...,t_m) \in D}$ is a subset of $R$. For all $i \in {1, 2, ..., m}$, the partial derivative of $f$ with respect to $t_i$ is given by</p>
+  <p style="text-align:center; font-size:1.1em;">
+    $\partialf/\partialt_i = (\partialf/\partialx_1)(\partialx_1/\partialt_i) + (\partialf/\partialx_2)(\partialx_2/\partialt_i) + ... + (\partialf/\partialx_n)(\partialx_n/\partialt_i)$
+  </p>
+</div>
+
+<p>口头表述：把 $f$ 对每个"中间变量" $x⯋$ 的偏导数，乘以那个中间变量对目标变量 $t⯊$ 的偏导数，全部求和。</p>
+
+<h2>3. 完整计算示例</h2>
+
+<div class="formula-block">
+  <div class="step"><strong>题目：</strong>设 $f(u,v,r) = ue^{vr}$，其中 $u = s^2t$，$v = st^2$，$r = s^2t^2$。求 $\partialf/\partials$ 和 $\partialf/\partialt$。</div>
+  <div class="step"><strong>步骤 1：求偏导数。</strong><br>
+  $fu = e^{vr}$<br>
+  $fv = ure^{vr}$<br>
+  $fr = uve^{vr}$</div>
+  <div class="step"><strong>步骤 2：求中间变量对 s 的偏导数。</strong><br>
+  $\partialu/\partials = 2st$<br>
+  $\partialv/\partials = t^2$<br>
+  $\partialr/\partials = 2st^2$</div>
+  <div class="step"><strong>步骤 3：应用链式法则。</strong><br>
+  $\partialf/\partials = fu\cdotus + fv\cdotvs + fr\cdotrs$<br>
+  $= e^{vr}\cdot2st + ure^{vr}\cdott^2 + uve^{vr}\cdot2st^2$<br>
+  $= e^{vr}t(2s + urt + 2uvst)$</div>
+  <div class="step"><strong>步骤 4：同理求 &part;f/&part;t</strong>（把 s 当常数）。<br>
+  $\partialu/\partialt = s^2$，$\partialv/\partialt = 2st$，$\partialr/\partialt = 2s^2t$<br>
+  $\partialf/\partialt = e^{vr}\cdots^2 + ure^{vr}\cdot2st + uve^{vr}\cdot2s^2t$<br>
+  $= e^{vr}s(s + 2urt + 2uvst)$</div>
+</div>
+
+<div class="warning">
+  <strong>计算技巧：</strong>像 $ue^{vr}$ 这种函数，在求 $fu$ 时把 $e^{vr}$ 当常数（因为 $v$ 和 $r$ 不依赖于 $u$），在求 $fv$ 时把 $u$ 和 $r$ 当常数。保持清晰的"中间变量思维"可以避免混乱。
+</div>
+
+<h2>4. 隐函数求导 — 第一部分（二元情形）</h2>
+
+<span class="exam-tag">22-Q1a</span><span class="exam-tag">25-Q1b</span>
+
+<p>回想一下一元微积分：$x^2 + y^2 = 1$ 定义了 $y$ 作为 $x$ 的隐函数。在多元中我们有系统性的处理方法。</p>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — Implicit Differentiation (Part I)</div>
+  <p>Let $f$ be a function of two variables $x$ and $y$, and suppose that the partial derivatives of $f$ are continuous throughout a non-empty open region $R \subseteq \mathbb{R}^2$. If $f(x, y) = 0$ determines, implicitly, $y$ as a differentiable function of $x$, then</p>
+  <p style="text-align:center; font-size:1.1em;">
+    $\partialf/\partialy \cdot dy/dx = −\partialf/\partialx$
+  </p>
+</div>
+
+<p>这个公式怎么来的？对 $f(x, y(x)) = 0$ 两边关于 $x$ 求全导数，用链式法则：</p>
+
+<div class="formula-block">
+  <div class="step">$d/dx [f(x, y(x))] = 0$</div>
+  <div class="step">$\partialf/\partialx \cdot dx/dx + \partialf/\partialy \cdot dy/dx = 0$</div>
+  <div class="step">$fx \cdot 1 + fy \cdot (dy/dx) = 0$</div>
+  <div class="step">$⇒ dy/dx = -fx / fy$</div>
+</div>
+
+<div class="formula-block">
+  <div class="step"><strong>例子：</strong>方程 $y^4 + 3y - 4x^3 - 5x = 1$ 隐式定义了 $y = y(x)$。求 $dy/dx$。<br><br>
+  <strong>解法：</strong>令 $f(x,y) = y^4 + 3y - 4x^3 - 5x - 1 = 0$<br>
+  $fx = -12x^2 - 5$<br>
+  $fy = 4y^3 + 3$<br>
+  $dy/dx = -fx/fy = -(-12x^2 - 5)/(4y^3 + 3) = (12x^2 + 5)/(4y^3 + 3)$</div>
+</div>
+
+<h2>5. 隐函数求导 — 第二部分（三元情形）</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — Implicit Differentiation (Part II)</div>
+  <p>Let $f$ be a function of three variables $x$, $y$ and $z$, and suppose that the partial derivatives of $f$ are continuous throughout a non-empty open region $R \subseteq \mathbb{R}^3$. If $f(x, y, z) = 0$ determines, implicitly, $z$ as a function of $x$ and $y$ whose partial derivatives are continuous, then</p>
+  <p style="text-align:center; font-size:1.1em;">
+    $\partialf/\partialz \cdot \partialz/\partialx = −\partialf/\partialx$ and $\partialf/\partialz \cdot \partialz/\partialy = −\partialf/\partialy$
+  </p>
+</div>
+
+<p>推导逻辑完全相同——对 $f(x, y, z(x,y)) = 0$ 关于 $x$（或 $y$）求偏导，应用链式法则。</p>
+
+<div class="formula-block">
+  <div class="step"><strong>例子：</strong>方程 $x^2 + y^2 + z^2 - 1 = 0$ 定义单位球面。求 $\partialz/\partialx$ 和 $\partialz/\partialy$。<br><br>
+  $f(x,y,z) = x^2 + y^2 + z^2 - 1$<br>
+  $fx = 2x$，$fy = 2y$，$fz = 2z$<br>
+  $\partialz/\partialx = -2x/(2z) = -x/z$<br>
+  $\partialz/\partialy = -2y/(2z) = -y/z$<br>
+  注意：当 $z = 0$（赤道上）时，这些偏导数不存在——因为球面在赤道处有垂直的切平面。</div>
+</div>
+
+<h2>6. 偏微分方程与变量替换</h2>
+
+<div class="concept-box">
+  <div class="label">为什么 L2 就要知道 PDE？</div>
+  <p><span class="en-term">Partial Differential Equations</span>（PDEs，偏微分方程）是整个物理学的基础——热传导方程、波动方程、拉普拉斯方程、薛定谔方程——全是 PDE。考试中常见的题型是：通过 <span class="en-term">change of variables</span>（变量替换）将某个 PDE 化简为标准形式。</p>
+</div>
+
+<span class="exam-tag">22-Q1a</span><span class="exam-tag">25-Q1b</span> 关于用新变量表达偏导数的结构化题目。
+
+<div class="formula-block">
+  <div class="step"><strong>典型考试题型：</strong>设 $u = x + y$，$v = x - y$。将 $\partialf/\partialx$ 和 $\partialf/\partialy$ 用 $\partialf/\partialu$ 和 $\partialf/\partialv$ 表示。<br><br>
+  <strong>步骤：</strong>由 $u = x + y, v = x - y$ 得 $x = (u+v)/2, y = (u-v)/2$。<br>
+  应用链式法则：<br>
+  $\partialf/\partialx = (\partialf/\partialu)(\partialu/\partialx) + (\partialf/\partialv)(\partialv/\partialx) = (\partialf/\partialu)\cdot1 + (\partialf/\partialv)\cdot1 = fu + fv$<br>
+  $\partialf/\partialy = (\partialf/\partialu)(\partialu/\partialy) + (\partialf/\partialv)(\partialv/\partialy) = (\partialf/\partialu)\cdot1 + (\partialf/\partialv)\cdot(-1) = fu - fv$</div>
+</div>
+
+<p>这个技巧在后续课程中会反复用到——解波动方程、拉普拉斯方程等 PDE 时，选择合适的变量替换是整个求解过程的关键第一步。</p>
+
+<h2>课堂测验</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1. 设 $f(u,v) = u^2 + v^2$，其中 $u = cos t$，$v = sin t$。用链式法则求 $df/dt$。</div>
+  <div class="option correct">A. $0$</div>
+  <div class="option wrong">B. $2 cos t + 2 sin t$</div>
+  <div class="option wrong">C. $-2 cos t sin t$</div>
+  <div class="option wrong">D. $2(cos^2 t - sin^2 t)$</div>
+  <div class="explanation">
+    <span class="correct">正确答案：A — 0</span><br>
+    $fu = 2u$，$fv = 2v$。<br>
+    $du/dt = -sin t$，$dv/dt = cos t$。<br>
+    链式法则：$df/dt = fu\cdotdu/dt + fv\cdotdv/dt = 2u\cdot(-sin t) + 2v\cdotcos t = 2 cos t\cdot(-sin t) + 2 sin t\cdotcos t = -2 sin t cos t + 2 sin t cos t = 0$。<br>
+    从几何角度看：$f(u,v) = u^2+v^2$ 在单位圆上恒为 1（因为 $cos^2t + sin^2t = 1$），常数函数的导数为 0。两种方法完美对应！
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2. 方程 $x^2y + e^{y} - x = 0$ 隐式定义了 $y = y(x)$。在点 $(1,0)$ 处，$dy/dx$ 的值为？</div>
+  <div class="option correct">A. $1$</div>
+  <div class="option wrong">B. $-1$</div>
+  <div class="option wrong">C. $1/2$</div>
+  <div class="option wrong">D. $0$</div>
+  <div class="explanation">
+    <span class="correct">正确答案：A</span><br>
+    设 $f(x,y) = x^2y + e^{y} - x$。<br>
+    $fx = 2xy - 1$，$fy = x^2 + e^{y}$<br>
+    在 $(1,0)$：$fx = 2\cdot1\cdot0 - 1 = -1$，$fy = 1^2 + e^0 = 2$<br>
+    $dy/dx = -fx/fy = -(-1)/2 = 1$<br>
+    先验证点(1,0)确实在曲线上：$1^2\cdot0 + e^0 - 1 = 0 + 1 - 1 = 0$。是的！
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3.（考试题型）设 $w = f(x,y)$，其中 $x = r cos θ$，$y = r sin θ$。则 $\partialw/\partialθ$ 等于？</div>
+  <div class="option wrong">A. $fx cos θ + fy sin θ$</div>
+  <div class="option wrong">B. $-fx cos θ - fy sin θ$</div>
+  <div class="option correct">C. $-fx r sin θ + fy r cos θ$</div>
+  <div class="option wrong">D. $fx r sin θ - fy r cos θ$</div>
+  <div class="explanation">
+    <span class="correct">正确答案：C</span><br>
+    应用链式法则：$\partialw/\partialθ = fx\cdot(\partialx/\partialθ) + fy\cdot(\partialy/\partialθ)$<br>
+    $\partialx/\partialθ = -r sin θ$，$\partialy/\partialθ = r cos θ$<br>
+    所以 $\partialw/\partialθ = fx\cdot(-r sin θ) + fy\cdot(r cos θ) = -r sin θ fx + r cos θ fy$<br>
+    这是极坐标变换链式法则的经典考题，考试中反复出现。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4.（考试题型）设 $u = x - ct$，$v = x + ct$。若定义 $F(u,v) = f(x,t)$，则 $ftt - c^2fxx$ 用 $F$ 的偏导数怎么表示？</div>
+  <div class="option wrong">A. $Fuu + Fvv$</div>
+  <div class="option wrong">B. $4c^2Fuv$</div>
+  <div class="option correct">C. $-4c^2Fuv$</div>
+  <div class="option wrong">D. $4Fuv$</div>
+  <div class="explanation">
+    <span class="correct">正确答案：C — -4c&sup2;F<sub>uv</sub></span><br>
+    这是波动方程（<span class="en-term">wave equation</span>）的经典变量替换。链式法则：<br>
+    $fx = Fu + Fv$ &rarr; $fxx = Fuu + 2Fuv + Fvv$<br>
+    $ft = c(Fv - Fu)$ &rarr; $ftt = c^2(Fuu - 2Fuv + Fvv)$<br>
+    代入：$ftt - c^2fxx = c^2(Fuu - 2Fuv + Fvv) - c^2(Fuu + 2Fuv + Fvv) = -4c^2Fuv$<br>
+    波动方程 $ftt = c^2fxx$ 等价于 $Fuv = 0$，解得 $F(u,v) = φ(u) + ψ(v)$——d'Alembert 解。<br>
+    <span class="exam-tag">22-Q1a</span>
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课要点总结</h3>
+  <ul>
+    <li><span class="en-term">Chain Rule</span> 的核心：<strong>每条依赖路径上的乘积之和</strong>。用 <span class="en-term">tree diagram</span> 辅助思考。</li>
+    <li>一般形式：$\partialf/\partialt⯊ = Σ⯋ (\partialf/\partialx⯋)(\partialx⯋/\partialt⯊)$——对每次出现在复合路径上的中间变量做贡献求和。</li>
+    <li><span class="en-term">Implicit differentiation</span>：$dy/dx = -fx/fy$（二元）和 $\partialz/\partialx = -fx/fz$（三元）——分子负号，分母是"目标变量"对应的偏导数。</li>
+    <li><span class="en-term">Change of variables</span> 是解 PDE 的第一步，也是考试的固定项目——用新偏导数表达旧偏导数。</li>
+    <li>链式法则在后续的每一个话题中都会用到：方向导数、梯度、泰勒展开、极值、约束优化——无处不用。</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">课外探索建议</div>
+  <p>尝试用链式法则推导笛卡尔和极坐标下的拉普拉斯方程 $\partial^2f/\partialx^2 + \partial^2f/\partialy^2$（需要两次应用链式法则）。另外，问自己一个"反向"问题：如果已知 $fu$ 和 $fv$，能不能反解出 $fx$ 和 $fy$？这和变量替换的 Jacobian 矩阵有关，是下一课的内容。需要更多练习的话直接问我。</p>
+</div>
+
+</body>
+</html>

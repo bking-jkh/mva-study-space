@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 6 课：切平面与可微性 — Tangent Planes & Differentiability</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">MVA 课程主页</a>
+  <a href="0005-directional.html">第 5 课：方向导数与梯度</a>
+  <a href="0007-extrema.html">第 7 课：极值与 Hessian</a>
+</nav>
+
+<h1>第 6 课：切平面与可微性</h1>
+<p><span class="en-term">Tangent Planes & Differentiability</span></p>
+
+<div class="concept-box">
+  <div class="label">核心思路</div>
+  <p>上一课我们学过了梯度是等值面的法向量。从这个几何直觉出发，求切平面就变得水到渠成——<strong>有了法向量和一个点，切平面就唯一确定了</strong>。本课我们把这个思想系统化：两种求切平面的方法，以及它们本质上的相通之处。同时引入<span class="en-term">可微性</span>的精确定义，这是多元微积分最核心的概念之一。</p>
+</div>
+
+<div class="toc">
+  <ol>
+    <li>梯度是等值面法向量的完整证明</li>
+    <li>切平面的两种形式</li>
+    <li>可微性的精确定义</li>
+    <li>梯度与最大变化率</li>
+    <li>应用实例</li>
+    <li>考试真题演练</li>
+  </ol>
+</div>
+
+<h2>一、梯度是等值面法向量——详细证明</h2>
+
+<p>让我们严格证明关于梯度的核心几何事实。这个证明在考试中几乎直接用结论，但理解它的推导会让你对概念的理解更深入。</p>
+
+<div class="proof-box">
+  <div class="pf-label">定理及证明（$n=2$ 情况）</div>
+  <p><strong>定理：</strong>设 $f: \mathbb{R}^2 \to \mathbb{R}$ 可微。在等值线 $f(x,y) = c$ 上任意一点，梯度 $\nabla f$ 垂直于该等值线的切向量。</p>
+  <p><strong>证明：</strong></p>
+  <p>1. 设 $\mathbf{r}(t) = (x(t), y(t))$ 是等值线 $f(x,y) = c$ 上的一条参数曲线，满足 $\mathbf{r}(0) = \mathbf{a} = (a,b)$。</p>
+  <p>2. 曲线在等值线上，意味着对所有 $t$，有 $f(x(t), y(t)) = c$。</p>
+  <p>3. 两边对 $t$ 求导（使用<span class="en-term">链式法则</span>）：</p>
+  <p>$$
+  \frac{d}{dt}f(x(t), y(t)) = \frac{\partial f}{\partial x} \cdot x'(t) + \frac{\partial f}{\partial y} \cdot y'(t) = \frac{d}{dt}(c) = 0
+  $$</p>
+  <p>4. 写成向量形式：$\nabla f(x(t), y(t)) \cdot \mathbf{r}'(t) = 0$。</p>
+  <p>5. 在 $t=0$ 处：$\nabla f(a,b) \cdot \mathbf{r}'(0) = 0$。</p>
+  <p>6. $\mathbf{r}'(0) = (x'(0), y'(0))$ 是等值线在点 $(a,b)$ 的<strong>切向量</strong>。因为 $\nabla f$ 与切向量的点积为零，梯度垂直于切向量——所以梯度是<strong>法向量</strong>。</p>
+  <p style="text-align:center;margin-top:0.5rem;">∎</p>
+</div>
+
+<p>注意这个论证的妙处：它不依赖于具体参数曲线的选择。任何一条在等值线上、通过点 $(a,b)$ 的曲线，其切向量都必须垂直于 $\nabla f(a,b)$。这意味着这些切向量全部共面（在 $n=2$ 时共线），共同张成等值线的<strong>切空间</strong>。</p>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — Gradient Vectors are Normal Vectors</div>
+  <p>Let $f$ denote a function of $n$ variables, $x_1, x_2, \dots, x_n$, with $f_{x_i}$ continuous for all $i \in \{1, 2, \dots, n\}$, and let $h \in \mathbb{R}$ be such that the level hyper-surface $S$ of $f$ at height $h$ is non-empty. If $\mathbf{a}$ belongs to a non-degenerate connected component of $S$, and if $\nabla f(\mathbf{a}) \neq \mathbf{0}$, then $\nabla f(\mathbf{a})$ is a normal vector to $S$ at $\mathbf{a}$.</p>
+</div>
+
+<h2>二、切平面的两种形式</h2>
+
+<div class="def-box">
+  <div class="def-label">形式一：函数图像的切平面</div>
+  <p>对于<strong>显式曲面</strong> $z = f(x,y)$（即写成 $z$ 等于某个表达式的形式），在点 $(a, b, f(a,b))$ 处的切平面方程为：</p>
+  <p>$$
+  z - f(a,b) = f_x(a,b)(x - a) + f_y(a,b)(y - b)
+  $$</p>
+  <p>这个公式怎么来的？把曲面改写为隐式：$g(x,y,z) = f(x,y) - z = 0$。则 $\nabla g = \langle f_x, f_y, -1 \rangle$。所以法向量是 $\langle f_x, f_y, -1 \rangle$，切平面方程为：</p>
+  <p>$$
+  f_x(a,b)(x-a) + f_y(a,b)(y-b) - (z - f(a,b)) = 0
+  $$</p>
+  <p>整理后即得上面的形式。</p>
+</div>
+
+<div class="def-box">
+  <div class="def-label">形式二：隐式曲面的切平面</div>
+  <p>对于<strong>隐式曲面</strong> $g(x,y,z) = c$（或等价地 $g(x,y,z) = 0$），在点 $(a,b,c)$（满足 $g(a,b,c) = c$）处的切平面方程直接用梯度来写：</p>
+  <p>$$
+  \nabla g(a,b,c) \cdot \langle x-a, y-b, z-c \rangle = 0
+  $$</p>
+  <p>展开即：</p>
+  <p>$$
+  g_x(a,b,c)(x-a) + g_y(a,b,c)(y-b) + g_z(a,b,c)(z-c) = 0
+  $$</p>
+  <p>核心思想：<strong>梯度是法向量，法向量与切平面上任意向量垂直</strong>。</p>
+</div>
+
+<div class="concept-box">
+  <div class="label">两种形式的关系</div>
+  <p>形式一是形式二的特例：取 $g(x,y,z) = f(x,y) - z$，则 $\nabla g = \langle f_x, f_y, -1 \rangle$。两种形式<strong>完全等价</strong>——只是写法不同。考试时看清题目给的是哪种曲面形式，直接套对应的公式。</p>
+</div>
+
+<h2>三、典型例题</h2>
+
+<div class="formula-block">
+  <p><strong>例题 1：求曲面 $x^2 + y^2 = 1 - z^2$ 在点 $(\frac{1}{2}, \frac{1}{2}, \frac{1}{\sqrt{2}})$ 处的切平面</strong></p>
+  <div class="step"><strong>Step 1</strong>：这是隐式曲面。设 $g(x,y,z) = x^2 + y^2 + z^2 - 1 = 0$。验证点满足方程：$\frac{1}{4} + \frac{1}{4} + \frac{1}{2} = 1$ ✓。</div>
+  <div class="step"><strong>Step 2</strong>：$\nabla g = \langle 2x, 2y, 2z \rangle$。在该点：$\nabla g = \langle 1, 1, \sqrt{2} \rangle$。</div>
+  <div class="step"><strong>Step 3</strong>：切平面方程：$1\cdot(x-\frac{1}{2}) + 1\cdot(y-\frac{1}{2}) + \sqrt{2}\cdot(z-\frac{1}{\sqrt{2}}) = 0$。</div>
+  <div class="step"><strong>Step 4</strong>：化简：$x + y + \sqrt{2}z - 1 - 1 + 1 = 0$（注意 $\sqrt{2} \cdot \frac{1}{\sqrt{2}} = 1$）。最终得 $x + y + \sqrt{2}z = 2$。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 2：求 $f(x,y) = x^2 + xy + y^2$ 在点 $(1,1)$ 处的切平面（$z = f(x,y)$ 形式）</strong></p>
+  <div class="step"><strong>Step 1</strong>：计算偏导数。$f_x = 2x + y$，$f_y = x + 2y$。</div>
+  <div class="step"><strong>Step 2</strong>：在 $(1,1)$ 处：$f_x(1,1) = 3$，$f_y(1,1) = 3$，$f(1,1) = 1 + 1 + 1 = 3$。</div>
+  <div class="step"><strong>Step 3</strong>：套公式 $z - f(a,b) = f_x(x-a) + f_y(y-b)$：$z - 3 = 3(x-1) + 3(y-1)$。</div>
+  <div class="step"><strong>Step 4</strong>：化简：$z = 3x + 3y - 3$。</div>
+</div>
+
+<h2>四、可微性 — Differentiability</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Differentiability</div>
+  <p>If $f$ is a function of $n$ variables $x_1, x_2, \dots, x_n$, for some natural number $n \ge 2$, and if $f_{x_i}$ is continuous at a given point $p \in \operatorname{Dom}(f)$, for all $i \in \{1, 2, \dots, n\}$, then $f$ is said to be differentiable at $p$. If $f$ is differentiable at all points in its domain, then it is called differentiable.</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">充分条件 — Sufficient Condition</div>
+  <p>如果 $f$ 在 $\mathbf{a}$ 的一个邻域内所有一阶偏导数<strong>存在且连续</strong>（即 $\nabla f$ 在该邻域内连续），则 $f$ 在 $\mathbf{a}$ 可微。</p>
+  <p>换句话说：<strong>$\nabla f$ 连续 $\implies$ $f$ 可微</strong>。但反过来不一定成立。</p>
+</div>
+
+<div class="warning">
+  <strong>注意！</strong>在多元微积分中，偏导数存在 $\neq$ 可微。这在单变量里不会发生——单变量中导数存在就等于可微。多元中可微是更强的条件：要求线性近似在<strong>所有方向</strong>上都一致地逼近函数，而不仅仅是沿坐标轴方向。
+</div>
+
+<p>换句话说，可微性是切平面存在的理论保证。如果 $f$ 在 $(a,b)$ 不可微，那么即使偏导数存在，$z = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)$ 也不一定是真正意义上的切平面，因为它可能在某些方向上不能很好地逼近函数。</p>
+
+<h2>五、最大变化率与梯度方向</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理</div>
+  <p>若 $f$ 在 $\mathbf{a}$ 可微且 $\nabla f(\mathbf{a}) \neq \mathbf{0}$，则：</p>
+  <ol>
+    <li>$f$ 在 $\mathbf{a}$ 处增长最快的方向是 $\nabla f(\mathbf{a})$ 的方向，最大增长率为 $|\nabla f(\mathbf{a})|$</li>
+    <li>$f$ 在 $\mathbf{a}$ 处减小最快的方向是 $-\nabla f(\mathbf{a})$ 的方向，最大减小率为 $|\nabla f(\mathbf{a})|$</li>
+    <li>在垂直于 $\nabla f(\mathbf{a})$ 的任意方向上，变化率（一阶近似下）为零</li>
+  </ol>
+</div>
+
+<h2>六、应用实例</h2>
+
+<div class="formula-block">
+  <p><strong>应用 1：温度分布——最快速升温方向</strong></p>
+  <div class="step">金属板温度分布：$T(x,y) = xe^{-y} + y^2$。求在点 $(1,0)$ 处的最快速升温方向和升温速率。</div>
+  <div class="step"><strong>分析</strong>：$\nabla T = \langle e^{-y}, -xe^{-y} + 2y \rangle$。在 $(1,0)$ 处：$\nabla T(1,0) = \langle 1, -1 \rangle$。</div>
+  <div class="step"><strong>结论</strong>：最快速升温方向是 $\nabla T = \langle 1, -1 \rangle$（单位化后是 $\langle 1/\sqrt{2}, -1/\sqrt{2} \rangle$）。升温速率为 $|\nabla T| = \sqrt{2}$。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>应用 2：猎犬追踪——梯度流问题</strong></p>
+  <div class="step">气味浓度分布：$s(x,y) = xe^{-y}$。猎犬总是沿着气味增加最快的方向前进。求猎犬从点 $(2,0)$ 出发的路径。</div>
+  <div class="step"><strong>分析</strong>：猎犬的速度方向始终平行于 $\nabla s = \langle e^{-y}, -xe^{-y} \rangle$。</div>
+  <div class="step">路径满足 $\frac{dy}{dx} = \frac{-xe^{-y}}{e^{-y}} = -x$。解得微分方程：$\frac{dy}{dx} = -x \implies y = -\frac{1}{2}x^2 + C$。</div>
+  <div class="step">由 $y(2) = 0$ 得 $0 = -\frac{1}{2}\cdot 4 + C \implies C = 2$。所以猎犬路径为 $y = 2 - \frac{1}{2}x^2$。</div>
+  <div class="step">这是一条抛物线——猎犬沿着气味梯度向上追去，形成一条<span class="en-term">梯度流线</span>。</div>
+</div>
+
+<h2>七、考试真题</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1：<span class="exam-tag">19-Q3</span> 曲面 $x^2 + y^2 + z^2 = 14$ 在点 $(1, 2, 3)$ 处的切平面方程是？</div>
+  <div class="option"><strong>A.</strong> $x + 4y + 9z = 14$</div>
+  <div class="option correct"><strong>B.</strong> $x + 2y + 3z = 14$</div>
+  <div class="option"><strong>C.</strong> $2x + 4y + 6z = 14$</div>
+  <div class="option"><strong>D.</strong> $x + y + z = 14$</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>设 $g(x,y,z) = x^2 + y^2 + z^2 - 14 = 0$。$\nabla g = \langle 2x, 2y, 2z \rangle$。在 $(1,2,3)$ 处：$\nabla g = \langle 2, 4, 6 \rangle$。切平面：$2(x-1) + 4(y-2) + 6(z-3) = 0$。化简：$2x + 4y + 6z = 2 + 8 + 18 = 28$，即 $x + 2y + 3z = 14$。</p>
+    <p>C 选项是法向量写对了但没化简——$2x + 4y + 6z = 28$，不是 14。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2：<span class="exam-tag">24-Q1c</span> 对于曲面 $z = x^2 - xy + y^2$，在点 $(1,1,1)$ 处切平面的法向量是？</div>
+  <div class="option"><strong>A.</strong> $\langle 1, 1, 1 \rangle$</div>
+  <div class="option correct"><strong>B.</strong> $\langle 1, 1, -1 \rangle$</div>
+  <div class="option"><strong>C.</strong> $\langle 1, 1, 0 \rangle$</div>
+  <div class="option"><strong>D.</strong> $\langle 2, 2, 1 \rangle$</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>关键一步来了！$z = f(x,y)$ 形式的曲面，法向量不是 $\langle f_x, f_y \rangle$，而是 $\langle f_x, f_y, -1 \rangle$。</p>
+    <p>$f_x = 2x - y$，$f_y = -x + 2y$。在 $(1,1)$ 处：$f_x = 2-1 = 1$，$f_y = -1+2 = 1$。所以法向量是 $\langle 1, 1, -1 \rangle$。</p>
+    <p>A 漏掉了 $-1$ 分量，这是最常见的错误！</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3：<span class="exam-tag">25-Q1a-iii</span> 在等值面 $g(x,y,z) = c$ 上，一点处沿哪个方向走，函数 $g$ 的值变化最小（一阶近似下为零）？</div>
+  <div class="option"><strong>A.</strong> 沿梯度方向走</div>
+  <div class="option correct"><strong>B.</strong> 沿切平面的任意方向走</div>
+  <div class="option"><strong>C.</strong> 沿梯度的反方向走</div>
+  <div class="option"><strong>D.</strong> 沿 $z$ 轴方向走</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>在等值面上，沿切平面的任意方向走，方向导数 $D_{\hat{\mathbf{u}}}g = \nabla g \cdot \hat{\mathbf{u}} = 0$（因为 $\hat{\mathbf{u}}$ 在切平面内，垂直于法向量 $\nabla g$）。所以 $g$ 的值不会改变——这正是等值面的定义。</p>
+    <p>A 和 C 沿着（或反着）梯度方向走，变化率绝对值最大。D 没有特殊意义。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4：关于多元函数的可微性，以下哪个说法正确？</div>
+  <div class="option"><strong>A.</strong> 偏导数存在即函数可微</div>
+  <div class="option"><strong>B.</strong> 可微等价于所有方向导数存在</div>
+  <div class="option"><strong>C.</strong> 偏导数连续是可微的充分条件</div>
+  <div class="option"><strong>D.</strong> 函数连续即可微</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：C</span></p>
+    <p>多元微积分中层级关系：偏导数连续 $\implies$ 可微 $\implies$ 偏导数存在 + 方向导数存在 + 连续。但反向箭头都不成立。</p>
+    <p>A：反例是经典的 $f(x,y) = xy/(x^2+y^2)$（补 $f(0,0)=0$），偏导数在原点存在但不可微。B：方向导数存在也不一定可微。D：连续更是远远不够。</p>
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课小结</h3>
+  <ul>
+    <li><strong>法向量身份</strong>：$\nabla f$ 始终垂直于等值面/等值线，这是通过链式法则 $f(\mathbf{r}(t)) = c \implies \nabla f \cdot \mathbf{r}'(t) = 0$ 严格证明的</li>
+    <li><strong>切平面公式一（显式）</strong>：$z - f(a,b) = f_x(a,b)(x-a) + f_y(a,b)(y-b)$，法向量 $\langle f_x, f_y, -1 \rangle$</li>
+    <li><strong>切平面公式二（隐式）</strong>：$\nabla g(a,b,c) \cdot \langle x-a, y-b, z-c \rangle = 0$，法向量直接是 $\nabla g$</li>
+    <li><strong>可微性</strong>：$f(\mathbf{a}+\mathbf{h}) = f(\mathbf{a}) + \nabla f(\mathbf{a}) \cdot \mathbf{h} + o(|\mathbf{h}|)$，即存在好的线性近似</li>
+    <li>偏导数连续 $\implies$ 可微，但偏导数存在 $\not\implies$ 可微</li>
+    <li>方向导数最大 $= |\nabla f|$（沿梯度方向），最小 $= -|\nabla f|$（沿梯度反方向），零（沿切平面方向）</li>
+    <li><strong>应用</strong>：温度梯度（热流方向）、气味梯度（猎犬追踪）都是梯度在实际中的体现</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">需要帮助？</div>
+  <p>切平面的两种公式容易记混？我教你一个口诀："显式 z=f 法向量三个分量 fx, fy, -1；隐式 g=0 法向量直接就是 nabla g。" 如果有不懂的地方，随时来问我！</p>
+</div>
+
+</body>
+</html>

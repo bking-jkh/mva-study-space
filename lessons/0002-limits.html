@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 2 课：极限与连续 — MVA</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">目 录</a>
+  <a href="0001-intro.html">← 上一课：多元函数基础</a>
+  <a href="0003-partial.html">下一课：偏导数 →</a>
+</nav>
+
+<h1>第 2 课：极限与连续</h1>
+<h2><span class="en-term">Limits &amp; Continuity</span></h2>
+
+<div class="concept-box">
+  <div class="label">核心洞察</div>
+  <p>多元函数的极限和一元函数有什么本质区别？一句话：在一维中你只能从左或从右接近一个点；在高维中，有<strong>无穷多条路径</strong>可以逼近同一个点。这就是一切麻烦的根源，也是一切美妙之所在。</p>
+</div>
+
+<h2>0. 热身：一元极限回顾</h2>
+
+<p>在进入多元之前，先回忆一下一元极限的 <span class="en-term">&epsilon;-&delta;</span> 定义：</p>
+
+<p>$limx\toa f(x) = L$ 定义为：对于任意 $ε > 0$，存在 $δ > 0$ 使得当 $0 < |x - a| < δ$ 时，$|f(x) - L| < ε$。</p>
+
+<p>高维的推广其实很自然——把绝对值的"距离"换成上一课学的 <span class="en-term">Euclidean distance</span> 即可。</p>
+
+<h2>1. 多元极限的 <span class="en-term">&epsilon;-&delta;</span> 定义</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Limit of a Function of Several Variables</div>
+  <p>Let $n \in ℕ$, let $D$ be a non-empty subset of $\mathbb{R}^n$, let $f : D \to \mathbb{R}$, and let $w \in D̄$. We say that $L$ is the limit of $f$ as $x$ approaches $w$ if for every $ε > 0$ there exists a $δ > 0$ such that for all $x \in D$ satisfying $0 < |x − w| < δ$ we have that $|f(x) − L| < ε$, and write $lim_{x\tow} f(x) = L$.</p>
+</div>
+
+<p>注意两个 "距离"的含义不同：</p>
+<ul>
+  <li>$|x - w|$ 是在 $\mathbb{R}^n$ 中的 <span class="en-term">Euclidean distance</span>（高维）；</li>
+  <li>$|f(x) - L|$ 是在 $\mathbb{R}$ 中的普通绝对值（一维，因为函数值是实数）。</li>
+</ul>
+
+<div class="concept-box">
+  <div class="label">等价表述 — 使用开球</div>
+  <p>上述定义等价于：对于任意 <span class="en-term">open ball</span> $B^1(L, ε)$ 在值域中，都存在一个 <span class="en-term">punctured open ball</span>（去心开球）$B^n(w, δ) \ {w}$ 在定义域中，使得 $f$ 把这个去心开球映射到 $B^1(L, ε)$ 内。</p>
+  <p>"不管你设定的误差带有多窄，我都能找到一个足够靠近自变量的区域，使得所有函数值落在你的误差带内。"</p>
+</div>
+
+<h2>2. 极限的基本性质</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — 极限的性质</div>
+  <p>若 $limx\tow f(x) = L$ 且 $limx\tow g(x) = M$，则：</p>
+  <ul>
+    <li><strong>唯一性</strong>（<span class="en-term">uniqueness</span>）：若极限存在，则它唯一。</li>
+    <li><strong>和</strong>：$lim (f + g) = L + M$</li>
+    <li><strong>积</strong>：$lim (f \cdot g) = LM$</li>
+    <li><strong>数乘</strong>：$lim (cf) = cL$（$c \in \mathbb{R}$）</li>
+    <li><strong>商</strong>：$lim (f/g) = L/M$（若 $M \neq 0$）</li>
+    <li><strong>幂</strong>：$lim (f^{p}) = L^{p}$（若 $L^{p}$ 有意义）</li>
+  </ul>
+</div>
+
+<p>这些性质和一元极限完全一样——毕竟证明只用到 $ε$ 和 $δ$ 的代数性质，不依赖空间维数。</p>
+
+<h2>3. 无限多条路径 — 最核心的差异</h2>
+
+<div class="concept-box">
+  <div class="label">关键差异 — 无穷多条路径</div>
+  <p>在一元情形中，你只能从左边（$x < a$）和右边（$x > a$）逼近 $a$。但在多元中，你可以沿着<strong>无数条不同的路径</strong>逼近 $w$——沿着直线 $y = mx$、沿着抛物线 $y = x^2$、沿着螺旋线……任何路径都可以。</p>
+  <p>极限存在当且仅当<strong>沿着每一条可能的路径</strong>极限都相同。</p>
+</div>
+
+<p>这一事实导致一个非常重要的考试技巧：</p>
+
+<div class="thm-box">
+  <div class="thm-label">策略 — 证明极限不存在</div>
+  <p>如果沿着<strong>两条不同路径</strong>逼近同一点得到的极限值不同，那么整体的极限就不存在。</p>
+  <p>最常用的两条路径：$y = 0$（沿 $x$-轴）和 $x = 0$（沿 $y$-轴）；或者 $y = mx$（一族过原点的直线）并看结果是否依赖于 $m$。</p>
+</div>
+
+<div class="formula-block">
+  <div class="step"><strong>经典例子：</strong>证明 $lim(x,y)\to(0,0) (xy) / (x^2 + y^2)$ 不存在。<br><br>
+  <strong>路径 1：</strong>沿 $y = 0$（x-轴），$f(x,0) = 0 / x^2 = 0$ &rarr; 极限 = 0。<br>
+  <strong>路径 2：</strong>沿 $y = x$，$f(x,x) = x^2 / (2x^2) = 1/2$ &rarr; 极限 = 1/2。<br>
+  因为 $0 \neq 1/2$，所以极限<strong>不存在</strong>。</div>
+</div>
+
+<h2>4. 连续性</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Continuous</div>
+  <p>A function $f$ of several variables is continuous at $w \in Dom(f)$ if $lim_{x\tow} f(x) = f(w)$. If $f$ is continuous at every point in its domain, then $f$ is said to be continuous.</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — 连续函数的性质</div>
+  <ul>
+    <li><strong>多项式</strong>（<span class="en-term">polynomials</span>）在其整个定义域（整个 $\mathbb{R}^n$）上连续。</li>
+    <li><strong>有理函数</strong>（<span class="en-term">rational functions</span>）在分母不为零的地方连续。</li>
+    <li><strong>复合</strong>（<span class="en-term">composition</span>）：若 $g$ 在 $w$ 连续且 $h$ 在 $g(w)$ 连续，则 $h ∘ g$ 在 $w$ 连续。</li>
+  </ul>
+</div>
+
+<p>连续函数的复合还是连续函数——这可以帮你省去很多繁琐的 $ε-δ$ 证明。</p>
+
+<h2>5. 基于定义证明连续：$f(x,y) = xy$</h2>
+
+<span class="exam-tag">22-Q1a-i</span> 考试中出现过从 <span class="en-term">&epsilon;-&delta;</span> 定义出发证明连续性的结构化题目。
+
+<div class="proof-box">
+  <div class="pf-label">证明：$f(x,y) = xy$ 在任意 $(a,b) \in \mathbb{R}^2$ 处连续</div>
+  <p>我们要证明：任意给定 $ε > 0$，存在 $δ > 0$ 使得当 $|(x,y) - (a,b)| < δ$ 时，$|xy - ab| < ε$。</p>
+  <p><strong>关键一步 — 拆解差值：</strong></p>
+  <p>$|xy - ab| = |xy - xb + xb - ab| = |x(y - b) + b(x - a)| \le |x||y - b| + |b||x - a|$</p>
+  <p>现在选取 $δ < 1$。当 $|(x,y) - (a,b)| < δ$ 时，有 $|x - a| < δ$ 且 $|y - b| < δ$。</p>
+  <p>由 $|x - a| < 1$ 得 $|x| < |a| + 1$。</p>
+  <p>因此：$|xy - ab| < (|a| + 1)|y - b| + |b||x - a| < (|a| + 1 + |b|)\cdotδ$</p>
+  <p>只需要令 $δ = min(1, ε/(|a| + |b| + 1))$，则 $|xy - ab| < ε$。证毕。</p>
+</div>
+
+<div class="warning">
+  <strong>重要：</strong>这个证明是考试结构化题目的经典套路。关键技巧是"加减同一项"（$+ xb - xb$）来拆解差值，这是 <span class="en-term">&epsilon;-&delta;</span> 证明中最常用的操作之一。
+</div>
+
+<h2>课堂测验</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1. 关于极限 $lim(x,y)\to(0,0) (x^2-y^2) / (x^2+y^2)$，以下说法正确的是？</div>
+  <div class="option wrong">A. 极限存在，值为 0</div>
+  <div class="option correct">B. 极限不存在</div>
+  <div class="option wrong">C. 极限存在，值为 1</div>
+  <div class="option wrong">D. 极限存在，值为 -1</div>
+  <div class="explanation">
+    <span class="correct">正确答案：B</span><br>
+    沿 $y = 0$：$f(x,0) = x^2/x^2 = 1$ &rarr; 极限 = 1。<br>
+    沿 $x = 0$：$f(0,y) = -y^2/y^2 = -1$ &rarr; 极限 = -1。<br>
+    因为 $1 \neq -1$，极限不存在。这就是多路径检验的威力。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2. 以下哪个函数在 $(0,0)$ 处连续？</div>
+  <div class="option wrong">A. $f(x,y) = xy/(x^2+y^2)$，$f(0,0) = 0$</div>
+  <div class="option correct">B. $f(x,y) = (x^3+y^3)/(x^2+y^2)$，$f(0,0) = 0$</div>
+  <div class="option wrong">C. $f(x,y) = (x-y)/(x+y)$，$f(0,0) = 0$</div>
+  <div class="option wrong">D. $f(x,y) = x/y + y/x$，$f(0,0) = 0$</div>
+  <div class="explanation">
+    <span class="correct">正确答案：B</span><br>
+    对于 B：用极坐标 $x = r cos θ, y = r sin θ$，得 $f = r(cos^3θ + sin^3θ)$。因为 $|cos^3θ + sin^3θ| \le 2$，所以 $|f| \le 2r \to 0$。极限为 0，等于 $f(0,0)$。而对于 A，我们上面已经证明极限不存在。C 沿 x=y 分母为零没定义。D 在原点附近无界。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3.（考试题型）若 $f(x,y)$ 在 $(a,b)$ 处连续且 $f(a,b) = 5$，以下哪个一定正确？</div>
+  <div class="option wrong">A. $f$ 的偏导数在 $(a,b)$ 处都存在</div>
+  <div class="option correct">B. 对于任意 $ε > 0$，存在 $δ > 0$ 使得当 $|(x,y)-(a,b)| < δ$ 时 $|f(x,y) - 5| < ε$</div>
+  <div class="option wrong">C. $f$ 在 $(a,b)$ 处可微</div>
+  <div class="option wrong">D. $f$ 在包含 $(a,b)$ 的整个开集上都有定义</div>
+  <div class="explanation">
+    <span class="correct">正确答案：B</span><br>
+    B 就是连续性定义本身的直接重述。连续性 <strong>不</strong> 保证可微性（一个常见误区！想想一维的 $|x|$ 在 $x=0$ —— 连续但不可导）。同样也不保证偏导数存在。D 也是错的，只需要在 $(a,b)$ 的一个去心邻域有定义即可。
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课要点总结</h3>
+  <ul>
+    <li>多元极限的 <span class="en-term">&epsilon;-&delta;</span> 定义和一元完全平行——把绝对值换成 <span class="en-term">Euclidean distance</span> 即可。</li>
+    <li>等价地，用 <span class="en-term">open ball</span> 的语言表述：值域里任意小的区间都能被定义域中一个足够小的球覆盖。</li>
+    <li><strong>核心差异：</strong>多元中有无穷多路径逼近同一点。极限存在要求沿 <strong>所有</strong> 路径的极限都一致。</li>
+    <li>找两条给出不同极限的路径，是证明极限不存在的标准方法。</li>
+    <li>连续性 = 极限等于函数值。多项式、有理函数（分母不为零处）、连续函数的复合都自动连续。</li>
+    <li><span class="en-term">&epsilon;-&delta;</span> 证明的技巧：加减同一项、选取 $δ$ 为多个条件的最小值。</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">课外探索建议</div>
+  <p>试着用极坐标变换（$x = r cosθ, y = r sinθ$）系统地分析 $lim(x,y)\to(0,0) (x^2y) / (x^4 + y^2)$ 是否存在。如果沿着 $y = mx^2$ 这条抛物线去检验，会得到什么结果？这和只检查直线的局限性有关。如果你需要更多的历年考题练习题，随时问我。</p>
+</div>
+
+</body>
+</html>

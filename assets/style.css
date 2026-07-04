@@ -1,0 +1,236 @@
+/* Tufte-style CSS for MVA Learning Space */
+:root {
+  --bg: #fffff8;
+  --text: #111;
+  --accent: #8b0000;
+  --light-accent: #fff5f5;
+  --border: #ddd;
+  --code-bg: #f7f7f7;
+  --quiz-bg: #fafaf5;
+  --concept-bg: #fffff0;
+  --formula-bg: #fdfdf8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "ET Book", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  font-size: 17px;
+}
+
+h1 { font-size: 2.2rem; margin: 2rem 0 1rem; font-weight: 700; letter-spacing: -0.5px; }
+h2 { font-size: 1.5rem; margin: 2rem 0 0.8rem; font-weight: 600; color: var(--accent); }
+h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; font-weight: 600; }
+
+p { margin: 0.8rem 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.en-term {
+  font-style: italic;
+  color: #555;
+  font-size: 0.92em;
+}
+
+/* Navigation */
+nav {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+nav a { margin-right: 1rem; }
+
+/* Concept box */
+.concept-box {
+  background: var(--concept-bg);
+  border-left: 4px solid #d4a017;
+  margin: 1.2rem 0;
+  padding: 1rem 1.2rem;
+}
+.concept-box .label {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  color: #b8860b;
+  margin-bottom: 0.3rem;
+}
+
+/* Formula block */
+.formula-block {
+  background: var(--formula-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 1.2rem 0;
+  padding: 1.2rem;
+  overflow-x: auto;
+}
+.formula-block .step {
+  margin: 0.6rem 0;
+  padding-left: 0.5rem;
+}
+.formula-block .step + .step {
+  border-top: 1px dashed var(--border);
+  padding-top: 0.6rem;
+}
+
+/* Quiz block */
+.quiz-block {
+  background: var(--quiz-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1.2rem;
+}
+.quiz-block .q-title {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+.quiz-block .option {
+  margin: 0.5rem 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: default;
+}
+.quiz-block .option:hover { background: #f0f0e0; }
+.quiz-block .explanation {
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  border-top: 1px dashed var(--border);
+  font-size: 0.95em;
+}
+.quiz-block .correct { color: #2e7d32; font-weight: 600; }
+.quiz-block .wrong { color: #c62828; }
+
+/* Summary */
+.summary-box {
+  background: var(--light-accent);
+  border: 1px solid #f0d0d0;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1.2rem;
+}
+.summary-box h3 { margin-top: 0; color: var(--accent); }
+.summary-box ul { margin-left: 1.5rem; }
+.summary-box li { margin: 0.4rem 0; }
+
+/* Exam tag */
+.exam-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+/* Ask agent */
+.ask-agent {
+  background: #f0f4ff;
+  border: 1px solid #c0c8e0;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  padding: 1rem 1.2rem;
+  font-size: 0.95em;
+}
+.ask-agent .label {
+  font-weight: 700;
+  color: #4a5fa0;
+  margin-bottom: 0.3rem;
+}
+
+/* Code */
+code {
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+}
+
+/* Math display */
+.math {
+  font-family: "Times New Roman", serif;
+  font-style: italic;
+}
+
+/* Table of contents */
+.toc { margin: 1rem 0 2rem; }
+.toc ol { list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 0.4rem 0; }
+.toc li::before {
+  content: "第 " counter(toc, cjk-ideographic) " 课 ";
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Definition */
+.def-box {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 1rem 0;
+  padding: 1rem 1.2rem;
+}
+.def-box .def-label {
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+/* Proof */
+.proof-box {
+  border-left: 3px solid #888;
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.95em;
+}
+.proof-box .pf-label {
+  font-weight: 700;
+  font-style: italic;
+  margin-bottom: 0.3rem;
+}
+
+/* Theorem */
+.thm-box {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  margin: 1rem 0;
+  padding: 1rem 1.2rem;
+}
+.thm-box .thm-label {
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* Warning */
+.warning {
+  background: #fff8e1;
+  border-left: 4px solid #f9a825;
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  font-size: 0.95em;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body { padding: 1rem; font-size: 16px; }
+  h1 { font-size: 1.6rem; }
+}

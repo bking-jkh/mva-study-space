@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 3 课：偏导数与高阶导数 — MVA</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">目 录</a>
+  <a href="0002-limits.html">← 上一课：极限与连续</a>
+  <a href="0004-chain.html">下一课：链式法则 →</a>
+</nav>
+
+<h1>第 3 课：偏导数与高阶导数</h1>
+<h2><span class="en-term">Partial Derivatives &amp; Higher-Order Derivatives</span></h2>
+
+<div class="concept-box">
+  <div class="label">核心洞察</div>
+  <p>偏导数就是把多元函数当作"只有一个变量在动，其他都冻结"来处理。你不需要学任何新的求导规则——所有一元微分的技术都能用，每次只对一个变量求导就行了。</p>
+</div>
+
+<h2>0. 热身：为什么要分开求？</h2>
+
+<p>设想你站在一座山上。山的高度是 $z = f(x,y)$。你想知道：</p>
+<ul>
+  <li>朝<strong>正东</strong>方向（只改变 $x$），山坡有多陡？&rarr; 这就是 $\partialf/\partialx$</li>
+  <li>朝<strong>正北</strong>方向（只改变 $y$），山坡有多陡？&rarr; 这就是 $\partialf/\partialy$</li>
+</ul>
+<p>偏导数独立地度量每个坐标方向的变化率。</p>
+
+<h2>1. 偏导数的定义</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Partial Derivative</div>
+  <p>Let $n \ge 2$ denote a natural number, let $D \subseteq \mathbb{R}^n$ have non-empty interior, and let $w = (w_1, w_2, ..., w_n)$ be an interior point of $D$. If $f : D \to \mathbb{R}$ is a function of the independent variables $x_1, x_2, ..., x_n$, then the partial derivative of $f$ with respect to $x_j$ at $w$ is defined to be</p>
+  <p style="text-align:center; margin:1rem 0;">
+    $\partialf/\partialx_j (w) := lim_{h\to0} (f(w_1, ..., w_j₋_1, w_j + h, w_j₊_1, ..., w_n) − f(w_1, ..., w_j₋_1, w_j, w_j₊_1, ..., w_n)) / h$,
+  </p>
+  <p>provided this limit exists.</p>
+</div>
+
+<div class="formula-block">
+  <div class="step"><strong>例 1：</strong>$f(x,y) = x^2 + y^2$<br>
+  对 $x$ 求偏导（把 $y$ 当常数）：$\partialf/\partialx = 2x + 0 = 2x$<br>
+  对 $y$ 求偏导（把 $x$ 当常数）：$\partialf/\partialy = 0 + 2y = 2y$</div>
+  <div class="step"><strong>例 2：</strong>$f(x,y) = x^2y^3 - 2xy^2 + 3y$<br>
+  对 $x$ 求偏导：$\partialf/\partialx = 2xy^3 - 2y^2 + 0$（把 $y$ 当常数，$3y$ 的导数是 0）<br>
+  对 $y$ 求偏导：$\partialf/\partialy = 3x^2y^2 - 4xy + 3$（把 $x$ 当常数，$-2xy^2$ 对 y 求导得 $-4xy$）</div>
+</div>
+
+<h2>2. 偏导数的运算性质</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — 偏导数的代数性质</div>
+  <p>以下性质可以直接从一元导数继承：</p>
+  <ul>
+    <li><strong>线性性</strong>（<span class="en-term">linearity</span>）：$\partial(f+g)/\partialx⯋ = \partialf/\partialx⯋ + \partialg/\partialx⯋$</li>
+    <li><strong>数乘</strong>：$\partial(cf)/\partialx⯋ = c \cdot \partialf/\partialx⯋$（$c$ 为常数）</li>
+    <li><strong>乘积法则</strong>（<span class="en-term">product rule</span>）：$\partial(fg)/\partialx⯋ = (\partialf/\partialx⯋)g + f(\partialg/\partialx⯋)$</li>
+    <li><strong>商法则</strong>（<span class="en-term">quotient rule</span>）：$\partial(f/g)/\partialx⯋ = [(\partialf/\partialx⯋)g - f(\partialg/\partialx⯋)] / g^2$（当 $g \neq 0$）</li>
+  </ul>
+</div>
+
+<p>也就是说，你不需要任何新技巧。每次只对一个变量求导，另一个看都不看。</p>
+
+<h2>3. 记号大全</h2>
+
+<p>偏导数有多种常用记号——碰到哪种都别慌：</p>
+
+<div class="formula-block">
+  <div class="step"><strong>一阶偏导数：</strong><br>
+  对 $x⯋$：$\partialf/\partialx⯋$、$fx⯋$、$D⯋f$</div>
+  <div class="step"><strong>二阶纯偏导数：</strong><br>
+  对 $x⯋$ 求两次：$\partial^2f/\partialx⯋^2$、$fx⯋x⯋$、$D⯋⯋f$</div>
+  <div class="step"><strong>二阶混合偏导数：</strong><br>
+  先对 $x⯊$ 再对 $x⯋$：$\partial^2f/\partialx⯋\partialx⯊$、$fx⯋x⯊$、$D⯋⯊f$<br>
+  <strong>注意顺序：</strong>$\partial^2f/\partialx\partialy$ 表示先对 $y$ 再对 $x$（从右往左读，因为最右边的 $\partialy$ 在内层，先操作）。</div>
+</div>
+
+<div class="warning">
+  <strong>混合偏导数的顺序：</strong>$fxy$ 和 $\partial^2f/\partialy\partialx$ 的书写顺序是颠倒的！前者 $fxy$ 表示先 $x$ 后 $y$。看仔细了——考试中写错了顺序会很惨。
+</div>
+
+<h2>4. 高阶偏导数</h2>
+
+<div class="formula-block">
+  <div class="step"><strong>例：</strong>$f(x,y) = x^3y + e^{xy}$<br><br>
+  <strong>一阶：</strong><br>
+  $fx = 3x^2y + ye^{xy}$<br>
+  $fy = x^3 + xe^{xy}$<br><br>
+  <strong>二阶纯：</strong><br>
+  $fxx = \partial/\partialx(3x^2y + ye^{xy}) = 6xy + y^2e^{xy}$<br>
+  $fyy = \partial/\partialy(x^3 + xe^{xy}) = x^2e^{xy}$<br><br>
+  <strong>二阶混合：</strong><br>
+  $fxy = \partial/\partialy(fx) = 3x^2 + e^{xy} + xye^{xy}$<br>
+  $fyx = \partial/\partialx(fy) = 3x^2 + e^{xy} + xye^{xy}$<br>
+  注意到 $fxy = fyx$——这不是巧合。</div>
+</div>
+
+<h2>5. Clairaut 定理</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — Clairaut's Theorem</div>
+  <p>Suppose that two mixed $n$-th ordered partial derivatives of a function $f$ involve the same differentiations, but in different orders. If those partial derivatives are continuous at a point $p$, and if $f$ and all partial derivatives of $f$ of order less than $n$ are continuous in a neighbourhood of $p$, then the two mixed $n$-th ordered partial derivatives of $f$ at $p$ are equal.</p>
+</div>
+
+<span class="exam-tag">25-Q1a-i</span> 考试直接问了 Clairaut 定理的条件和等式成立的前提。
+
+<div class="concept-box">
+  <div class="label">关键理解</div>
+  <p>Clairaut 定理说"混合偏导数通常相等"，前提条件是它们在该点<strong>连续</strong>。如果这个条件不满足，混合偏导数可能存在但<strong>不相等</strong>。</p>
+</div>
+
+<h2>6. 反例：当 Clairaut 失效时</h2>
+
+<p>下面的经典反例说明连续性条件是必需的：</p>
+
+<div class="formula-block">
+  <div class="step"><strong>定义：</strong><br>
+  $f(x,y) = xy(x^2-y^2)/(x^2+y^2)$ 当 $(x,y) \neq (0,0)$，且 $f(0,0) = 0$。<br><br>
+  <strong>计算结果：</strong><br>
+  $fxy(0,0) = 1$，但 $fyx(0,0) = -1$<br>
+  两者不相等！这是因为混合偏导数在原点不连续。</div>
+</div>
+
+<h2>7. 偏导数与连续性之间的关系</h2>
+
+<div class="thm-box">
+  <div class="thm-label">定理 — 偏导数的连续性与函数的连续性</div>
+  <p>如果 $f$ 的所有一阶偏导数在点 $w$ 的某个邻域内<strong>存在且有界</strong>，那么 $f$ 在 $w$ 处<strong>连续</strong>。</p>
+  <p>但反过来不成立：偏导数存在<strong>不能</strong>保证函数连续。</p>
+</div>
+
+<div class="warning">
+  <strong>常见误区：</strong>在一元微积分中，"可导必连续"。在多元中，<strong>偏导数都存在不保证连续</strong>！原因是偏导数只检验了沿着坐标轴方向的行为，无法捕捉沿其他路径可能出现的问题。
+</div>
+
+<div class="formula-block">
+  <div class="step"><strong>反例 — 偏导数存在但不连续：</strong><br>
+  定义 $f(x,y) = 0$ 当 $xy = 0$，否则 $f(x,y) = 1$。<br>
+  在原点：(a) 沿 x-轴，$f(x,0) = 0$ &rarr; $fx(0,0) = 0$；同理 $fy(0,0) = 0$。两个偏导数都存在！<br>
+  但是 (b) 沿直线 $y = x$（$x \neq 0$），$f(x,x) = 1$，而 $f(0,0) = 0$。极限不等于函数值，函数不连续。</div>
+</div>
+
+<h2>课堂测验</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1. 设 $f(x,y) = ln(x^2 + y)$，则 $\partialf/\partialx$ 是？</div>
+  <div class="option wrong">A. $1/(x^2 + y)$</div>
+  <div class="option correct">B. $2x/(x^2 + y)$</div>
+  <div class="option wrong">C. $2x/(x^2 + y^2)$</div>
+  <div class="option wrong">D. $(2x + 1)/(x^2 + y)$</div>
+  <div class="explanation">
+    <span class="correct">正确答案：B</span><br>
+    把 $y$ 当常数，对 $x$ 求导：$\partial/\partialx[ln(x^2 + y)] = (2x)/(x^2 + y)$。别忘了链式法则——对 $ln$ 求导得 $1/(x^2+y)$，再乘以括号内部对 $x$ 的导数 $2x$。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2.（考试题型）对于 $f(x,y) = x^3e^{2y} + y^2 sin x$，$fxy$ 在 $(0,0)$ 处等于多少？</div>
+  <div class="option correct">A. 0</div>
+  <div class="option wrong">B. 1</div>
+  <div class="option wrong">C. 6</div>
+  <div class="option wrong">D. 不存在</div>
+  <div class="explanation">
+    <span class="correct">正确答案：A — 0</span><br>
+    先求 $fx = 3x^2e^{2y} + y^2 cos x$（把 $y$ 当常数）。<br>
+    再对 $y$ 求偏导得 $fxy = 6x^2e^{2y} + 2y cos x$（把 $x$ 当常数，注意 $e^{2y}$ 对 y 求导要乘以 2）。<br>
+    代入 $(0,0)$：$6\cdot0\cdote^0 + 0 = 0$。<br>
+    你也可以先求 $fy$ 再求 $fyx$，根据 Clairaut 定理（偏导数在原点连续，确实满足条件）应该得到同样的答案 0。
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3. Clairaut 定理断言 $fxy = fyx$ 在什么条件成立？</div>
+  <div class="option wrong">A. 只要 $f$ 可微</div>
+  <div class="option wrong">B. 只要 $f$ 连续</div>
+  <div class="option correct">C. 当 $fxy$ 和 $fyx$ 在该点连续</div>
+  <div class="option wrong">D. 无条件成立，混合偏导数总是相等</div>
+  <div class="explanation">
+    <span class="correct">正确答案：C</span><br>
+    这正是 Clairaut 定理的核心——混合偏导数相等的前提是它们在考虑的点处<strong>连续</strong>。教科书上的经典反例（$f(x,y) = xy(x^2-y^2)/(x^2+y^2)$）说明当连续性不满足时，$fxy$ 和 $fyx$ 可以不同。<br>
+    <span class="exam-tag">25-Q1a-i</span>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4. 以下哪个说法是正确的？</div>
+  <div class="option wrong">A. 多元函数偏导数都存在，则函数一定连续</div>
+  <div class="option correct">B. 多元函数偏导数都存在且偏导数有界，则函数连续</div>
+  <div class="option wrong">C. 多元函数偏导数都连续，则函数连续</div>
+  <div class="option wrong">D. B 和 C 都正确</div>
+  <div class="explanation">
+    <span class="correct">正确答案：D</span><br>
+    偏导数存在且有界（有界性在紧集上由连续导出）蕴含函数连续。偏导数都连续当然更强——自然蕴含函数连续。但仅仅偏导数存在（无界或无连续性保证）不足以保证连续性，上面那节课的反例已经说明了这一点。
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课要点总结</h3>
+  <ul>
+    <li><span class="en-term">Partial derivative</span> = 固定其他变量，对单一变量使用一元导数法则。</li>
+    <li>偏导数记号多样——$\partialf/\partialx⯋$、$fx⯋$、$D⯋f$——看到哪种都别慌。注意混合偏导数的顺序约定。</li>
+    <li><span class="en-term">Clairaut's Theorem</span>：混合偏导数在其连续处相等。连续性是关键条件。</li>
+    <li><strong>偏导数存在 &ne; 函数连续</strong>（这和一元微积分有本质区别！）。偏导数只管坐标轴方向，管不了其他方向。</li>
+    <li>实际操作就是一次又一次地使用一元求导法则——每次只动一个变量。</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">课外探索建议</div>
+  <p>用 Clairaut 定理验证 $f(x,y) = arctan(y/x)$ 的混合偏导数相等（在其定义域的任意点上）。然后思考：为什么 $f(x,y) = arctan(y/x)$ 在 $x = 0$ 上没定义？这和偏导数有什么关系？如果你需要训练更多高阶混合偏导数的计算题（考试每年必有一道），随时找我。</p>
+</div>
+
+</body>
+</html>

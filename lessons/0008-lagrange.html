@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 8 课：Lagrange 乘子法 — Lagrange Multipliers</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">MVA 课程主页</a>
+  <a href="0007-extrema.html">第 7 课：极值与 Hessian</a>
+  <a href="0009-multiple.html">第 9 课：多重积分</a>
+</nav>
+
+<h1>第 8 课：Lagrange 乘子法</h1>
+<p><span class="en-term">Lagrange Multipliers</span></p>
+
+<div class="concept-box">
+  <div class="label">核心思路</div>
+  <p>上一课我们学会了在<strong>无约束</strong>情况下找极值。但现实中，优化问题几乎总是带着约束条件："在满足 $g(x,y) = 0$ 的前提下，最大化 $f(x,y)$"。这就是<span class="en-term">约束优化</span>问题。Lagrange 的天才想法是：把约束条件"吸收"进目标函数，从而把约束问题转化为无约束问题。这个方法在物理、经济、工程中无处不在，也是 MVA 考试每年必考的核心技能。</p>
+</div>
+
+<div class="toc">
+  <ol>
+    <li>约束优化问题的动机与实例</li>
+    <li>Lagrangian 的构造</li>
+    <li>方法的几何直觉与证明梗概</li>
+    <li>标准解题步骤</li>
+    <li>典型例题（箱体体积、Cobb-Douglas、椭球内接长方体）</li>
+    <li>多个约束条件</li>
+    <li>考试真题演练</li>
+  </ol>
+</div>
+
+<h2>一、问题动机</h2>
+
+<p>来看看几个典型的约束优化问题：</p>
+<ul>
+  <li><strong>问题 1</strong>：做一个无盖长方体箱子，表面积固定为 108，如何设计使体积最大？</li>
+  <li><strong>问题 2</strong>：椭圆面 $16x^2 + 4y^2 + 9z^2 = 144$ 内，内接最大体积的长方体（各边平行于坐标轴）尺寸是多少？</li>
+  <li><strong>问题 3</strong>：<span class="exam-tag">19-Q5</span> Cobb-Douglas 生产函数 $P(x,y) = 100x^{3/4}y^{1/4}$，成本约束 $20x + 25y \le 5000$，求最大产量。</li>
+</ul>
+
+<p>这些问题都有一个共同结构：<strong>约束条件下的极值</strong>。我们不能直接用 $\nabla f = \mathbf{0}$ 来找——因为满足 $\nabla f = \mathbf{0}$ 的点不一定满足约束条件。</p>
+
+<h2>二、Lagrangian 的构造</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Lagrangian</div>
+  <p>Let $n$ and $k \in \mathbb{N}$ with $n \ge 2$, and let $f, g_1, g_2, \dots, g_k$ denote functions of $n$ variables with the same domain. The Lagrangian of $f$ subject to the constraints $g_i = 0$ for all $i \in \{1, \dots, k\}$, is the function $L$ of $n + k$ variables defined by</p>
+  <p>$$
+  L(x_1, \dots, x_n, \lambda_1, \dots, \lambda_k) := f(x_1, \dots, x_n) + \sum_{i=1}^{k} \lambda_i g_i(x_1, \dots, x_n),
+  $$</p>
+  <p>where $\lambda_i \in \mathbb{R}$ is known as the $i$-th Lagrange multiplier.</p>
+</div>
+
+<div class="concept-box">
+  <div class="label">初学者理解技巧</div>
+  <p>你可以这样记：Lagrangian = 目标函数 + $\lambda$ $\times$ 约束条件。把约束条件"惩罚"进了目标函数——$\lambda$ 控制了"惩罚"的强度。当你对 Lagrangian 求导并令为零时，约束条件的梯度会和目标函数的梯度对齐。这正是方法的精髓。</p>
+</div>
+
+<h2>三、几何直觉与证明梗概</h2>
+
+<p>考虑最简单的情况：$n=2$，一个约束 $g(x,y) = 0$。约束方程定义了一条曲线。</p>
+
+<div class="proof-box">
+  <div class="pf-label">关键几何洞察 — $n=2, k=1$</div>
+  <p>在约束曲线 $g(x,y) = 0$ 上，如果我们沿着曲线移动，方向导数 $D_{\hat{\mathbf{t}}}f$（其中 $\hat{\mathbf{t}}$ 是曲线的单位切向量）必须为零——因为我们要在曲线上找极值。</p>
+  <p>但 $D_{\hat{\mathbf{t}}}f = \nabla f \cdot \hat{\mathbf{t}}$，所以 $\nabla f \cdot \hat{\mathbf{t}} = 0$。这意味着 $\nabla f$ 垂直于切向量 $\hat{\mathbf{t}}$。</p>
+  <p>同时，由上一课的结论，$\nabla g$ 也垂直于曲线的切向量（梯度永远是等值线的法向量）。</p>
+  <p>所以，在约束极值点处，<strong>$\nabla f$ 和 $\nabla g$ 同向</strong>（可能差一个标量倍数）——即存在 $\lambda$ 使得：</p>
+  <p>$$
+  \nabla f = -\lambda \nabla g
+  $$</p>
+  <p>移项得 $\nabla f + \lambda \nabla g = \mathbf{0}$，这正是 $\nabla \mathcal{L} = \mathbf{0}$。</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">Lagrange 乘子定理</div>
+  <p>设 $f, g_1, \dots, g_k$ 是 $C^1$ 函数。如果在约束 $g_i(\mathbf{x}) = 0$ 下，$f$ 在点 $\mathbf{p}$ 取得局部极值，且 $\nabla g_1(\mathbf{p}), \dots, \nabla g_k(\mathbf{p})$ 线性无关，则存在唯一的 $\lambda_1, \dots, \lambda_k$ 使得 $\nabla \mathcal{L}(\mathbf{p}, \lambda_1, \dots, \lambda_k) = \mathbf{0}$。</p>
+</div>
+
+<h2>四、标准解题步骤</h2>
+
+<div class="formula-block">
+  <p><strong>Lagrange 乘子法——五步走</strong></p>
+  <div class="step"><strong>Step 1</strong>：写出目标函数 $f$ 和约束条件 $g = 0$（注意：约束必须写成等于零的形式！）</div>
+  <div class="step"><strong>Step 2</strong>：构造 Lagrangian：$\mathcal{L} = f + \lambda g$</div>
+  <div class="step"><strong>Step 3</strong>：对 Lagrangian 的所有变量求偏导并令为零：</div>
+  <div class="step" style="padding-left:3rem;">
+    $\frac{\partial \mathcal{L}}{\partial x_i} = 0$（对所有 $i=1,\dots,n$）<br>
+    $\frac{\partial \mathcal{L}}{\partial \lambda_j} = 0$（对所有 $j=1,\dots,k$）
+  </div>
+  <div class="step"><strong>Step 4</strong>：解这个 $n+k$ 元方程组，得到候选点</div>
+  <div class="step"><strong>Step 5</strong>：将所有候选点和边界情况代入 $f$，比较得出最大值/最小值</div>
+</div>
+
+<div class="warning">
+  <strong>重要！</strong>Step 3 中对 $\lambda$ 求导并令为零，得到的就是约束条件本身：$\frac{\partial \mathcal{L}}{\partial \lambda} = g(\mathbf{x}) = 0$。所以 Lagrange 乘子法<strong>自动确保了</strong>候选点满足约束——非常巧妙！
+</div>
+
+<h2>五、典型例题</h2>
+
+<div class="formula-block">
+  <p><strong>例题 1：无盖长方体——固定表面积，最大化体积</strong></p>
+  <div class="step"><strong>Step 1</strong>：箱子尺寸为 $x, y, z$（$z$ 为高）。无盖，表面积 $S = xy + 2xz + 2yz = 108$。目标：最大化体积 $V = xyz$。</div>
+  <div class="step"><strong>Step 2</strong>：$\mathcal{L}(x,y,z,\lambda) = xyz + \lambda(xy + 2xz + 2yz - 108)$。</div>
+  <div class="step"><strong>Step 3 — 求偏导</strong>：</div>
+  <div class="step" style="padding-left:3rem;">
+    $\mathcal{L}_x = yz + \lambda(y + 2z) = 0$<br>
+    $\mathcal{L}_y = xz + \lambda(x + 2z) = 0$<br>
+    $\mathcal{L}_z = xy + \lambda(2x + 2y) = 0$<br>
+    $\mathcal{L}_\lambda = xy + 2xz + 2yz - 108 = 0$
+  </div>
+  <div class="step"><strong>Step 4 — 解方程组</strong>：从第一个方程得 $yz = -\lambda(y + 2z)$，即 $\lambda = -\frac{yz}{y+2z}$。类似地，由第二个方程得 $\lambda = -\frac{xz}{x+2z}$。</div>
+  <div class="step">比较两个 $\lambda$ 表达式：$\frac{yz}{y+2z} = \frac{xz}{x+2z}$。若 $z \neq 0$，两边消去 $z$ 得 $\frac{y}{y+2z} = \frac{x}{x+2z}$。交叉相乘：$y(x+2z) = x(y+2z) \implies xy + 2yz = xy + 2xz \implies 2yz = 2xz \implies x = y$。</div>
+  <div class="step">同理（比较第二和第三式）可得 $x = 2z$。所以 $x = y = 2z$。</div>
+  <div class="step">代入约束：$4z^2 + 2(2z)(z) + 2(2z)(z) = 4z^2 + 4z^2 + 4z^2 = 12z^2 = 108 \implies z^2 = 9 \implies z = 3$。</div>
+  <div class="step">所以 $x = 6$，$y = 6$，$z = 3$。最大体积 $V = 6 \cdot 6 \cdot 3 = 108$。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 2：<span class="exam-tag">19-Q5</span> Cobb-Douglas 生产优化</strong></p>
+  <div class="step">生产函数：$P(x,y) = 100x^{3/4}y^{1/4}$。成本约束：$20x + 25y \le 5000$。求最大产量。</div>
+  <div class="step"><strong>Step 1</strong>：约束不等式 $\le$，但极值一定在边界上取到（因为 $P$ 随 $x,y$ 递增）。所以约束改写为 $20x + 25y = 5000$，即 $g(x,y) = 20x + 25y - 5000 = 0$。</div>
+  <div class="step"><strong>Step 2</strong>：$\mathcal{L}(x,y,\lambda) = 100x^{3/4}y^{1/4} + \lambda(20x + 25y - 5000)$。</div>
+  <div class="step"><strong>Step 3 — 求偏导</strong>：</div>
+  <div class="step" style="padding-left:3rem;">
+    $\mathcal{L}_x = 100 \cdot \frac{3}{4}x^{-1/4}y^{1/4} + 20\lambda = 75x^{-1/4}y^{1/4} + 20\lambda = 0$<br>
+    $\mathcal{L}_y = 100 \cdot \frac{1}{4}x^{3/4}y^{-3/4} + 25\lambda = 25x^{3/4}y^{-3/4} + 25\lambda = 0$<br>
+    $\mathcal{L}_\lambda = 20x + 25y - 5000 = 0$
+  </div>
+  <div class="step"><strong>Step 4 — 解方程组</strong>：由第一个方程得 $\lambda = -\frac{75}{20}x^{-1/4}y^{1/4} = -\frac{15}{4}x^{-1/4}y^{1/4}$。</div>
+  <div class="step">由第二个方程得 $\lambda = -x^{3/4}y^{-3/4}$。</div>
+  <div class="step">令两个 $\lambda$ 相等：$\frac{15}{4}x^{-1/4}y^{1/4} = x^{3/4}y^{-3/4}$。</div>
+  <div class="step">化简：$\frac{15}{4}y^{1/4+3/4} = x^{3/4+1/4} \implies \frac{15}{4}y = x$。</div>
+  <div class="step">代入约束：$20(\frac{15}{4}y) + 25y = 5000 \implies 75y + 25y = 5000 \implies 100y = 5000 \implies y = 50$。</div>
+  <div class="step">所以 $x = \frac{15}{4} \cdot 50 = 187.5$。最大产量 $P = 100 \cdot 187.5^{0.75} \cdot 50^{0.25}$。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 3：椭球内接最大体积长方体</strong></p>
+  <div class="step">椭球：$\frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} = 1$。长方体在第一象限的顶点为 $(x,y,z)$，则体积为 $V = 8xyz$（对称性）。</div>
+  <div class="step"><strong>Step 1</strong>：约束 $g(x,y,z) = \frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} - 1 = 0$。最大化 $f = 8xyz$（或等价地最大化 $xyz$，常数因子不影响极值点）。</div>
+  <div class="step"><strong>Step 2</strong>：$\mathcal{L} = xyz + \lambda\left(\frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} - 1\right)$。</div>
+  <div class="step"><strong>Step 3 — 求偏导</strong>：</div>
+  <div class="step" style="padding-left:3rem;">
+    $\mathcal{L}_x = yz + \frac{2\lambda x}{a^2} = 0 \implies yz = -\frac{2\lambda x}{a^2}$<br>
+    $\mathcal{L}_y = xz + \frac{2\lambda y}{b^2} = 0 \implies xz = -\frac{2\lambda y}{b^2}$<br>
+    $\mathcal{L}_z = xy + \frac{2\lambda z}{c^2} = 0 \implies xy = -\frac{2\lambda z}{c^2}$
+  </div>
+  <div class="step"><strong>Step 4 — 找比例关系</strong>：第一个方程乘以 $x$：$xyz = -\frac{2\lambda x^2}{a^2}$。第二个方程乘以 $y$：$xyz = -\frac{2\lambda y^2}{b^2}$。第三个方程乘以 $z$：$xyz = -\frac{2\lambda z^2}{c^2}$。</div>
+  <div class="step">所以 $-\frac{2\lambda x^2}{a^2} = -\frac{2\lambda y^2}{b^2} = -\frac{2\lambda z^2}{c^2}$。由于 $\lambda \neq 0$，得 $\frac{x^2}{a^2} = \frac{y^2}{b^2} = \frac{z^2}{c^2}$。</div>
+  <div class="step">代入约束：每个等比于 $\frac{1}{3}$，所以 $\frac{x^2}{a^2} = \frac{1}{3} \implies x = \frac{a}{\sqrt{3}}$。同理 $y = \frac{b}{\sqrt{3}}$，$z = \frac{c}{\sqrt{3}}$。</div>
+  <div class="step">最大体积 $V_{\max} = 8 \cdot \frac{a}{\sqrt{3}} \cdot \frac{b}{\sqrt{3}} \cdot \frac{c}{\sqrt{3}} = \frac{8abc}{3\sqrt{3}}$。</div>
+</div>
+
+<h2>六、多个约束条件</h2>
+
+<p>当 $k > 1$ 时，方法完全一样——只是 Lagrangian 中有多个乘子。例如对于两个约束 $g_1 = 0$ 和 $g_2 = 0$：</p>
+<p>$$
+\mathcal{L}(\mathbf{x}, \lambda_1, \lambda_2) = f(\mathbf{x}) + \lambda_1 g_1(\mathbf{x}) + \lambda_2 g_2(\mathbf{x})
+$$</p>
+
+<p>约束极值的几何条件是：$\nabla f$ 落在 $\nabla g_1$ 和 $\nabla g_2$ 张成的平面内——即存在 $\lambda_1, \lambda_2$ 使得 $\nabla f + \lambda_1 \nabla g_1 + \lambda_2 \nabla g_2 = \mathbf{0}$。</p>
+
+<h2>七、考试真题</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1：<span class="exam-tag">19-Q5</span> 在 Cobb-Douglas 问题 $P(x,y) = 100x^{3/4}y^{1/4}$ 约束 $20x + 25y = 5000$ 中，Lagrange 乘子 $\lambda$ 的经济含义是什么？</div>
+  <div class="option"><strong>A.</strong> 最优生产点的总产量</div>
+  <div class="option correct"><strong>B.</strong> 增加一单位预算，产量的边际增量（影子价格）</div>
+  <div class="option"><strong>C.</strong> 最优生产点的边际成本</div>
+  <div class="option"><strong>D.</strong> 没有任何经济含义</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>在经济学中，Lagrange 乘子 $\lambda$ 代表约束条件的<span class="en-term">影子价格</span>（shadow price）——即增加一单位资源（在这里是预算）所带来的目标函数（产量）的边际增量。这是 Lagrange 乘子在实际中最有价值的解释之一。</p>
+    <p>A 是 $P(x^*, y^*)$ 而不是 $\lambda$。C 不准确——边际成本是另一个概念。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2：<span class="exam-tag">21-Q1b</span> 在球面 $x^2 + y^2 + z^2 = 1$ 上，函数 $f(x,y,z) = x + 2y + 3z$ 的最大值是多少？</div>
+  <div class="option"><strong>A.</strong> $1$</div>
+  <div class="option"><strong>B.</strong> $3$</div>
+  <div class="option correct"><strong>C.</strong> $\sqrt{14}$</div>
+  <div class="option"><strong>D.</strong> $6$</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：C</span></p>
+    <p>构造 $\mathcal{L} = x + 2y + 3z + \lambda(x^2 + y^2 + z^2 - 1)$。</p>
+    <p>$\mathcal{L}_x = 1 + 2\lambda x = 0 \implies x = -\frac{1}{2\lambda}$</p>
+    <p>$\mathcal{L}_y = 2 + 2\lambda y = 0 \implies y = -\frac{1}{\lambda}$</p>
+    <p>$\mathcal{L}_z = 3 + 2\lambda z = 0 \implies z = -\frac{3}{2\lambda}$</p>
+    <p>代入约束：$(-\frac{1}{2\lambda})^2 + (-\frac{1}{\lambda})^2 + (-\frac{3}{2\lambda})^2 = 1 \implies \frac{1}{4\lambda^2} + \frac{1}{\lambda^2} + \frac{9}{4\lambda^2} = \frac{14}{4\lambda^2} = 1$。</p>
+    <p>所以 $\lambda^2 = 14/4 \implies \lambda = \pm \sqrt{14}/2$。取 $\lambda = -\sqrt{14}/2$ 得到最大值（因为系数为正）。此时 $f = \frac{14}{-2\lambda} = -\frac{14}{-2(-\sqrt{14}/2)} = \sqrt{14}$。</p>
+    <p>其实可以更简单地用 Cauchy-Schwarz：$f = \langle 1,2,3 \rangle \cdot \langle x,y,z \rangle \le |\langle 1,2,3 \rangle| \cdot |\langle x,y,z \rangle| = \sqrt{14} \cdot 1 = \sqrt{14}$。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3：<span class="exam-tag">25-Q2a</span> 在抛物面 $z = x^2 + y^2$ 下方、平面 $z = h$ 上方的区域内，要内接一个体积最大的直立长方体（底面在 $z=h$ 上，顶面四个顶点在抛物面上）。如果用 Lagrange 乘子法，约束条件有几个？</div>
+  <div class="option"><strong>A.</strong> 0 个（无约束）</div>
+  <div class="option correct"><strong>B.</strong> 1 个约束（顶点在抛物面上）</div>
+  <div class="option"><strong>C.</strong> 2 个约束</div>
+  <div class="option"><strong>D.</strong> 3 个约束</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>长方体顶面四个顶点在抛物面上，底面在 $z = h$ 平面上。由于对称性，顶点可以表示为 $(\pm x, \pm y, x^2+y^2)$。长方体高为 $z - h = x^2 + y^2 - h$。体积 $V = (2x)(2y)(x^2 + y^2 - h) = 4xy(x^2 + y^2 - h)$。</p>
+    <p>这里变量只有 $x$ 和 $y$，且它们满足 $x^2 + y^2 \ge h$（顶点在抛物面上，在平面上方）。如果需要用到 Lagrange 乘子法（比如被限制在某个特定的抛物面上），那就是一个约束：$z = x^2 + y^2$。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4：<span class="exam-tag">23-Q1b</span> 对于约束优化问题，以下哪个条件是使用 Lagrange 乘子法时必须满足的？</div>
+  <div class="option"><strong>A.</strong> 目标函数必须是线性的</div>
+  <div class="option"><strong>B.</strong> 约束条件的梯度必须为零</div>
+  <div class="option correct"><strong>C.</strong> 约束条件的梯度必须线性无关</div>
+  <div class="option"><strong>D.</strong> 目标函数的 Hessian 必须正定</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：C</span></p>
+    <p>Lagrange 乘子法定理的前提条件是约束梯度 $\nabla g_1, \dots, \nabla g_k$ 线性无关（这称为<span class="en-term">约束规范性条件</span> constraint qualification）。如果约束梯度线性相关，方法可能失效或漏解。</p>
+    <p>A：目标函数可以是任意 $C^1$ 函数。B：约束梯度为零意味着临界点，但这不是前提条件。D：Hessian 的正定性用于分类极值，不是方法的前提。</p>
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课小结</h3>
+  <ul>
+    <li><strong>约束优化问题</strong>：在 $g(\mathbf{x}) = 0$ 的约束下最小化或最大化 $f(\mathbf{x})$</li>
+    <li><strong>Lagrangian</strong>：$\mathcal{L}(\mathbf{x}, \lambda) = f(\mathbf{x}) + \lambda g(\mathbf{x})$（多个约束时加多项）</li>
+    <li><strong>几何直觉</strong>：在约束极值点处，$\nabla f$ 和 $\nabla g$ 平行（因为两者都垂直于约束曲线的切方向）</li>
+    <li><strong>五步法</strong>：(1) 写出目标和约束 (2) 构造 Lagrangian (3) 求所有偏导 = 0 (4) 解方程组 (5) 代入比较</li>
+    <li><strong>关键技巧</strong>：对 $\lambda$ 求导自动回退到约束条件</li>
+    <li><strong>常见考试题型</strong>：
+      <ul>
+        <li>Cobb-Douglas 生产优化（<span class="exam-tag">19-Q5</span>）</li>
+        <li>球面上函数的极值（<span class="exam-tag">21-Q1b</span>）</li>
+        <li>几何体内的最大体积问题（<span class="exam-tag">25-Q2a</span>）</li>
+        <li>环形面积最大问题（<span class="exam-tag">23-Q1b</span>）</li>
+      </ul>
+    </li>
+    <li><strong>多个约束</strong>：$\mathcal{L} = f + \lambda_1 g_1 + \lambda_2 g_2 + \dots$，其余步骤完全一样</li>
+    <li><strong>约束规范性条件</strong>：约束梯度必须线性无关，否则 Lagrange 乘子法可能失效</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">需要练习？</div>
+  <p>Lagrange 乘子法是 MVA 考试的"杀手锏"题型——几乎每年一道大题。如果你需要更多练习题，或者对 Cobb-Douglas 这类带分数指数的方程求解有困难，随时来找我。我们一起多练几道，考试就稳了！</p>
+</div>
+
+</body>
+</html>

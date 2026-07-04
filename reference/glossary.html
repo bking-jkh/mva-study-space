@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MVA 术语表 — Multivariable & Vector Analysis Glossary</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav><a href="../lessons/0001-intro.html">第 1 课</a> <a href="../RESOURCES.md">资源清单</a></nav>
+
+<h1>MVA 术语表 <span style="font-size:0.5em;color:#888;">Glossary</span></h1>
+
+<h2>一、基础概念 <span class="en-term">Foundations</span></h2>
+
+<div class="def-box">
+<div class="def-label">function of several variables</div>
+<p><strong>多元函数</strong> — 定义域是 Rⁿ 的子集、值域是 R 的子集的函数。记为 f: D ⊆ Rⁿ → R。例如 f(x,y) = x² + y²。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">level curve / contour</div>
+<p><strong>水平曲线 / 等高线</strong> — 满足 f(x,y) = c（c 为常数）的所有点 (x,y) 的集合。在拓扑地图中表示相同海拔的连线。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">vertical section</div>
+<p><strong>垂直截面</strong> — 固定一个自变量，看函数随另一个变量变化的图形。在 x₀ 处沿 y 方向的垂直截面是 y ↦ f(x₀, y) 的图像。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">open n-dimensional ball</div>
+<p><strong>开球</strong> — Bⁿ(x, r) = {y ∈ Rⁿ : |x − y| < r}，以 x 为中心、r 为半径但不包含球面的 n 维球体。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">interior point / boundary point</div>
+<p><strong>内点 / 边界点</strong> — 如果一个点存在一个完全包含在集合内的开球邻域，则为内点；如果在闭包中但不是内点，则为边界点。</p>
+</div>
+
+<h2>二、极限与连续 <span class="en-term">Limits & Continuity</span></h2>
+
+<div class="def-box">
+<div class="def-label">limit of f as x approaches w</div>
+<p><strong>多元极限</strong> — lim_{x→w} f(x) = L 指：对任意 ε > 0，存在 δ > 0，使得 0 < |x − w| < δ 时 |f(x) − L| < ε。注意：在 Rⁿ 中可以从无穷多个方向逼近。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">continuity</div>
+<p><strong>连续性</strong> — 如果 lim_{x→w} f(x) = f(w)，则称 f 在 w 处连续。</p>
+</div>
+
+<h2>三、偏导数 <span class="en-term">Partial Derivatives</span></h2>
+
+<div class="def-box">
+<div class="def-label">partial derivative ∂f/∂xⱼ</div>
+<p><strong>偏导数</strong> — 将其他变量视为常数，只对一个变量求导。定义：∂f/∂xⱼ(w) = lim_{h→0} [f(w₁,...,wⱼ+h,...,wₙ) − f(w)] / h。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">mixed second order partial derivatives</div>
+<p><strong>二阶混合偏导数</strong> — ∂²f/∂xᵢ∂xⱼ，先对 xⱼ 求偏导再对 xᵢ 求偏导。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Clairaut's Theorem</div>
+<p><strong>克莱罗定理</strong> — 如果混合偏导数在某点连续，则求导次序可交换：∂²f/∂x∂y = ∂²f/∂y∂x。</p>
+</div>
+
+<h2>四、链式法则 <span class="en-term">Chain Rule</span></h2>
+
+<div class="def-box">
+<div class="def-label">chain rule</div>
+<p><strong>链式法则</strong> — ∂f/∂tᵢ = (∂f/∂x₁)(∂x₁/∂tᵢ) + ... + (∂f/∂xₙ)(∂xₙ/∂tᵢ)。用树状图记忆。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">implicit differentiation</div>
+<p><strong>隐函数求导</strong> — 若 f(x,y) = 0 隐式定义 y 为 x 的函数，则 dy/dx = −(∂f/∂x)/(∂f/∂y)。</p>
+</div>
+
+<h2>五、方向导数与梯度 <span class="en-term">Directional Derivatives & Gradient</span></h2>
+
+<div class="def-box">
+<div class="def-label">directional derivative Dᵤf</div>
+<p><strong>方向导数</strong> — 函数在给定方向 u 上的变化率。Dᵤf(x) = lim_{h→0} [f(x + hû) − f(x)] / h。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">gradient vector ∇f</div>
+<p><strong>梯度向量</strong> — ∇f(a) = ⟨∂f/∂x₁(a), ..., ∂f/∂xₙ(a)⟩。梯度的方向是函数增长最快的方向，|∇f| 是最大变化率。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Dᵤf = ∇f · u</div>
+<p>方向导数等于梯度与单位方向向量的点积：Dᵤf(a) = ∇f(a) · û。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">tangent plane</div>
+<p><strong>切平面</strong> — 曲面在一点处的切平面以梯度为法向量。方程：⟨x − a, y − b, z − c⟩ · ∇g(a,b,c) = 0。</p>
+</div>
+
+<h2>六、极值与 Hessian <span class="en-term">Extrema & Hessian</span></h2>
+
+<div class="def-box">
+<div class="def-label">stationary point / critical point / singular point</div>
+<p><strong>驻点</strong>（∇f = 0）/ <strong>临界点</strong>（驻点或奇点）/ <strong>奇点</strong>（∇f 不存在）。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">saddle point</div>
+<p><strong>鞍点</strong> — 驻点但不是局部极值点。在某些方向上是极大，在另一些方向上是极小。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Hessian matrix</div>
+<p><strong>Hessian 矩阵</strong> — 所有二阶偏导数组成的方阵。用于判定驻点性质（主 minor 判别法）。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">leading minor test</div>
+<p><strong>主 minor 判别法</strong> — 对 n=2：若 det(H₁) < 0, det(H) > 0 → 极大；det(H₁) > 0, det(H) > 0 → 极小；否则为鞍点。</p>
+</div>
+
+<h2>七、Lagrange 乘子 <span class="en-term">Lagrange Multipliers</span></h2>
+
+<div class="def-box">
+<div class="def-label">Lagrange multiplier λ</div>
+<p><strong>拉格朗日乘子</strong> — 在有约束 g(x) = 0 的条件下求 f 的极值时，构造 Lagrangian L = f + λg，然后令 ∇L = 0。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Lagrangian</div>
+<p><strong>拉格朗日函数</strong> — L(x₁,...,xₙ, λ₁,...,λₖ) = f(x) + Σ λᵢ gᵢ(x)。</p>
+</div>
+
+<h2>八、多重积分 <span class="en-term">Multiple Integrals</span></h2>
+
+<div class="def-box">
+<div class="def-label">double integral ∬ f dA</div>
+<p><strong>二重积分</strong> — 二元函数在平面区域上的积分，表示曲面下的体积（当 f ≥ 0）。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">triple integral ∭ f dV</div>
+<p><strong>三重积分</strong> — 三元函数在空间区域上的积分，可表示密度函数的质量。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Fubini-Tonelli Theorem</div>
+<p><strong>富比尼-托内利定理</strong> — 允许将重积分写成累次积分（repeated integral），且可以交换积分次序。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Riemann sum</div>
+<p><strong>黎曼和</strong> — 将区域划分为小矩形/长方体，取样本点，求和。当划分趋于零时即得积分值。</p>
+</div>
+
+<h2>九、坐标变换 <span class="en-term">Coordinate Transformations</span></h2>
+
+<div class="def-box">
+<div class="def-label">polar coordinates (r, θ)</div>
+<p><strong>极坐标</strong> — x = r cos θ, y = r sin θ, dA = r dr dθ。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">cylindrical polar coordinates (r, θ, z)</div>
+<p><strong>柱坐标</strong> — x = r cos θ, y = r sin θ, z = z, dV = r dr dθ dz。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">spherical polar coordinates (ρ, φ, θ)</div>
+<p><strong>球坐标</strong> — x = ρ sin φ cos θ, y = ρ sin φ sin θ, z = ρ cos φ, dV = ρ² sin φ dρ dφ dθ。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Jacobian ∂(x,y)/∂(u,v)</div>
+<p><strong>雅可比行列式</strong> — 坐标变换时的面积/体积缩放因子。dx dy = |∂(x,y)/∂(u,v)| du dv。</p>
+</div>
+
+<h2>十、向量微积分 <span class="en-term">Vector Calculus</span></h2>
+
+<div class="def-box">
+<div class="def-label">conservative vector field</div>
+<p><strong>保守向量场</strong> — 存在势函数 φ 使得 F = ∇φ。等价条件：线积分与路径无关，或 curl F = 0（在单连通区域上）。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">divergence div F</div>
+<p><strong>散度</strong> — div F = ∂F₁/∂x + ∂F₂/∂y + ∂F₃/∂z = ∇ · F，衡量向量场在某点的"发散"程度。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">curl curl F</div>
+<p><strong>旋度</strong> — curl F = ∇ × F，衡量向量场在某点的"旋转"程度。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">line integral ∫_C F · dr</div>
+<p><strong>线积分</strong> — 向量场沿曲线的积分，可理解为力沿路径做的功。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Green's Theorem</div>
+<p><strong>格林定理</strong> — ∮_C P dx + Q dy = ∬_D (∂Q/∂x − ∂P/∂y) dA，将平面闭曲线上的线积分转化为区域上的二重积分。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Stokes' Theorem</div>
+<p><strong>斯托克斯定理</strong> — ∮_C F · dr = ∬_S (curl F) · n dS，将空间闭曲线上的线积分转化为曲面上的面积分。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Gauss' Divergence Theorem</div>
+<p><strong>高斯散度定理</strong> — ∬_S F · n dS = ∭_D div F dV，将闭曲面上的通量积分转化为区域上的三重积分。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Laplacian Δf</div>
+<p><strong>拉普拉斯算子</strong> — Δf = ∇²f = ∂²f/∂x² + ∂²f/∂y² + ∂²f/∂z² = div(∇f)。满足 Δf = 0 的函数称为调和函数。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Taylor polynomial (multivariate)</div>
+<p><strong>多元泰勒多项式</strong> — 多元函数在某点附近的近似展开。如 f(x,y) 在 (0,0) 的三阶 Taylor 展开。</p>
+</div>
+
+<div class="def-box">
+<div class="def-label">Cobb-Douglas function</div>
+<p><strong>柯布-道格拉斯函数</strong> — 生产函数 f(x,y) = Ax^α y^β，常用于经济学优化问题（Lagrange 乘子法的典型应用）。</p>
+</div>
+
+<p style="margin-top:2rem;text-align:center;color:#888;font-size:0.9em;">— MVA Glossary · 共 40+ 术语 —</p>
+</body>
+</html>

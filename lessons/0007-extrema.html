@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 7 课：极值与 Hessian 判别法 — Extrema & Hessian Test</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">MVA 课程主页</a>
+  <a href="0006-tangent.html">第 6 课：切平面与可微性</a>
+  <a href="0008-lagrange.html">第 8 课：Lagrange 乘子法</a>
+</nav>
+
+<h1>第 7 课：极值与 Hessian 判别法</h1>
+<p><span class="en-term">Extrema & Hessian Test</span></p>
+
+<div class="concept-box">
+  <div class="label">核心思路</div>
+  <p>单变量微积分里，找极值很简单：求导，令导数为零，看二阶导数正负。多元的情况本质相同——但工具从"一阶导数"升级为<span class="en-term">梯度</span>，从"二阶导数"升级为<span class="en-term">Hessian 矩阵</span>。本课的目标是帮你建立从单变量到多元的直觉迁移，并掌握考试中反复出现的 Hessian 判别法。</p>
+</div>
+
+<div class="toc">
+  <ol>
+    <li>极值的基本概念与分类</li>
+    <li>临界点的三种类型</li>
+    <li>Hessian 矩阵</li>
+    <li>主子式判别法（$n=2$ 和 $n=3$）</li>
+    <li>一般判别定理</li>
+    <li>典型例题</li>
+    <li>考试真题演练</li>
+  </ol>
+</div>
+
+<h2>一、极值的基本概念</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Extrema & Critical Points</div>
+  <p>Let $n \in \mathbb{N}$ with $n \ge 2$, let $D \subseteq \mathbb{R}^n$ have non-empty interior, and let $f : D \to \mathbb{R}$. A point $\mathbf{a} \in D$ is said to be a:</p>
+  <p>$\bullet$ <strong>local maximum</strong> if there exists an open ball $U \ni \mathbf{a}$ such that $f(\mathbf{x}) \le f(\mathbf{a})$ for all $\mathbf{x} \in U \cap D$;</p>
+  <p>$\bullet$ <strong>local minimum</strong> if there exists an open ball $U \ni \mathbf{a}$ such that $f(\mathbf{x}) \ge f(\mathbf{a})$ for all $\mathbf{x} \in U \cap D$;</p>
+  <p>$\bullet$ <strong>global maximum</strong> if $f(\mathbf{x}) \le f(\mathbf{a})$ for all $\mathbf{x} \in D$;</p>
+  <p>$\bullet$ <strong>global minimum</strong> if $f(\mathbf{x}) \ge f(\mathbf{a})$ for all $\mathbf{x} \in D$;</p>
+  <p>$\bullet$ <strong>stationary point</strong> if $\mathbf{a}$ is an interior point of $D$ and $\nabla f(\mathbf{a}) = \mathbf{0}$;</p>
+  <p>$\bullet$ <strong>singular point</strong> if $\mathbf{a}$ is an interior point of $D$ and $\nabla f$ does not exist at $\mathbf{a}$;</p>
+  <p>$\bullet$ <strong>critical point</strong> if $\mathbf{a}$ is an interior point of $D$ and is either a stationary point or a singular point;</p>
+  <p>$\bullet$ <strong>saddle point</strong> if $\mathbf{a}$ is a stationary point which is neither a local maximum nor a local minimum.</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">费马引理的推广</div>
+  <p>如果 $f$ 在内部点 $\mathbf{a}$ 处取得局部极值，且 $\nabla f(\mathbf{a})$ 存在，则 $\nabla f(\mathbf{a}) = \mathbf{0}$（即 $\mathbf{a}$ 必为驻点）。</p>
+  <p>换句话说，内部极值点 $\implies$ 要么是驻点，要么是奇异点，要么在边界上。</p>
+</div>
+
+<div class="proof-box">
+  <div class="pf-label">证明思路</div>
+  <p>固定任意方向 $\hat{\mathbf{u}}$，考虑单变量函数 $g(t) = f(\mathbf{a} + t\hat{\mathbf{u}})$。如果 $f$ 在 $\mathbf{a}$ 取局部极值，那么 $g$ 在 $t=0$ 取局部极值。由单变量费马引理，$g'(0) = 0$。但 $g'(0) = \nabla f(\mathbf{a}) \cdot \hat{\mathbf{u}}$。这对所有 $\hat{\mathbf{u}}$ 成立，所以 $\nabla f(\mathbf{a}) = \mathbf{0}$。</p>
+</div>
+
+<div class="concept-box">
+  <div class="label">为什么需要 Hessian？</div>
+  <p>找到驻点只是第一步——我们还要判断它是极大值点、极小值点，还是鞍点。在单变量中，二阶导数 $f''(a)$ 的正负就能告诉我们答案。在多元中，我们需要一个矩阵——<strong>Hessian 矩阵</strong>——来统一处理所有方向的二阶变化。</p>
+</div>
+
+<h2>三、Hessian 矩阵</h2>
+
+<div class="def-box">
+  <div class="def-label">定义 — Hessian Matrix ($n=2$)</div>
+  <p>Let $D \subseteq \mathbb{R}^2$ have non-empty interior. If $f : D \to \mathbb{R}$ is such that all its second order partial derivatives exist at the point $(a, b) \in D$, then the Hessian matrix of $f$ at $(a, b)$ is</p>
+  <p>$$
+  H(a, b) = \begin{bmatrix} f_{11}(a,b) & f_{12}(a,b) \\ f_{21}(a,b) & f_{22}(a,b) \end{bmatrix}.
+  $$</p>
+</div>
+
+<div class="def-box">
+  <div class="def-label">定义 — Hessian Matrix ($n=3$)</div>
+  <p>Let $D \subseteq \mathbb{R}^3$ have non-empty interior. If $f : D \to \mathbb{R}$ is such that all its second order partial derivatives exist at the point $(a, b, c) \in D$, then the Hessian of $f$ at $(a, b, c)$ is</p>
+  <p>$$
+  H(a, b, c) = \begin{bmatrix} f_{11} & f_{12} & f_{13} \\ f_{21} & f_{22} & f_{23} \\ f_{31} & f_{32} & f_{33} \end{bmatrix}(a, b, c).
+  $$</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">Clairaut 定理（二阶混合偏导数的对称性）</div>
+  <p>如果二阶偏导数 $f_{xy}$ 和 $f_{yx}$ 连续，则它们相等：$f_{xy} = f_{yx}$。因此 Hessian 矩阵是对称矩阵。在 MVA 考试范围内，你几乎总是可以假设 Hessian 是<strong>对称</strong>的。</p>
+</div>
+
+<h2>四、主子式判别法</h2>
+
+<div class="concept-box">
+  <div class="label">背景知识：正定性与主子式</div>
+  <p>一个对称矩阵 $A$ 是<span class="en-term">正定</span>（positive definite）的，当且仅当所有主子式 $> 0$。是<span class="en-term">负定</span>（negative definite）的，当且仅当主子式交替符号：$\det(A_1) < 0, \det(A_2) > 0, \det(A_3) < 0, \dots$。</p>
+  <p>第 $k$ 个<span class="en-term">主子式</span>（leading principal minor）$\det(H_k)$ 是 Hessian 矩阵左上角 $k \times k$ 子矩阵的行列式。</p>
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">Leading Minor Test ($n=2$)</div>
+  <p>Let $D \subseteq \mathbb{R}^2$ have non-empty interior. Suppose $f : D \to \mathbb{R}$ is such that all its second order partial derivatives are continuous at a point $(a, b) \in D$, and that $(a, b)$ is a stationary point of $f$. If $H = H(a, b)$ denotes the Hessian of $f$ at $(a, b)$ and if $\det(H) \neq 0$, then $(a, b)$ is:</p>
+  <p>$\bullet$ a <strong>local maximum</strong> if $\det(H_1) < 0$ and $\det(H) > 0$;</p>
+  <p>$\bullet$ a <strong>local minimum</strong> if $\det(H_1) > 0$ and $\det(H) > 0$;</p>
+  <p>$\bullet$ a <strong>saddle point</strong> if neither of the above hold.</p>
+</div>
+
+<div class="warning">
+  <strong>常见错误！</strong>很多同学以为 $\det(H_2) > 0$ 加 $\det(H_1) > 0$ 才是极小值，而把 $\det(H_1) < 0$ 的情况忘记了。其实极小值的条件是所有主子式 $> 0$，极大值是主子式交错正负（第一个主子式 $< 0$，第二个 $> 0$）。
+</div>
+
+<div class="thm-box">
+  <div class="thm-label">Leading Minor Test ($n=3$)</div>
+  <p>Let $D \subseteq \mathbb{R}^3$ have non-empty interior. Suppose $f : D \to \mathbb{R}$ is such that all its second order partial derivatives are continuous at a point $(a, b, c) \in D$, and that $(a, b, c)$ is a stationary point of $f$. If $H = H(a, b, c)$ denotes the Hessian of $f$ at $(a, b, c)$ and if $\det(H) \neq 0$, then $(a, b, c)$ is:</p>
+  <p>$\bullet$ a <strong>local maximum</strong> if $\det(H_1) < 0$, $\det(H_2) > 0$ and $\det(H_3) < 0$;</p>
+  <p>$\bullet$ a <strong>local minimum</strong> if $\det(H_1) > 0$, $\det(H_2) > 0$ and $\det(H_3) > 0$;</p>
+  <p>$\bullet$ a <strong>saddle point</strong> if neither of the above hold.</p>
+</div>
+
+<h2>五、典型例题</h2>
+
+<div class="formula-block">
+  <p><strong>例题 1：$f(x,y) = x^2 - y^2$ ——鞍点的经典例子</strong></p>
+  <div class="step"><strong>Step 1 — 求驻点</strong>：$\nabla f = \langle 2x, -2y \rangle = \langle 0, 0 \rangle \implies (x,y) = (0,0)$。</div>
+  <div class="step"><strong>Step 2 — 求 Hessian</strong>：$f_{xx} = 2$，$f_{xy} = 0$，$f_{yy} = -2$。$H = \begin{bmatrix} 2 & 0 \\ 0 & -2 \end{bmatrix}$。</div>
+  <div class="step"><strong>Step 3 — 主子式</strong>：$\det(H_1) = f_{xx} = 2 > 0$，$\det(H_2) = 2 \cdot (-2) - 0^2 = -4 < 0$。</div>
+  <div class="step"><strong>Step 4 — 判定</strong>：$\det(H_2) < 0$，所以 $(0,0)$ 是<strong>鞍点</strong>。</div>
+  <div class="step"><strong>几何理解</strong>：沿 $x$ 轴方向，$f(x,0) = x^2$，开口向上（像极小值）；沿 $y$ 轴方向，$f(0,y) = -y^2$，开口向下（像极大值）。马鞍形状！</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 2：$f(x,y,z) = x^2 + y^2 - z^2$ ——三维鞍点</strong></p>
+  <div class="step"><strong>Step 1 — 求驻点</strong>：$\nabla f = \langle 2x, 2y, -2z \rangle = \langle 0,0,0 \rangle \implies (0,0,0)$。</div>
+  <div class="step"><strong>Step 2 — 求 Hessian</strong>：</div>
+  <div class="step">$H = \begin{bmatrix} 2 & 0 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & -2 \end{bmatrix}$。</div>
+  <div class="step"><strong>Step 3 — 主子式</strong>：$\det(H_1) = 2 > 0$，$\det(H_2) = \det\begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix} = 4 > 0$，$\det(H_3) = 2 \cdot 2 \cdot (-2) = -8 < 0$。</div>
+  <div class="step"><strong>Step 4 — 判定</strong>：符号模式是 $(+, +, -)$，不是全正也不是交替正负，所以是<strong>鞍点</strong>。在 $x$-$y$ 平面内是极小值，沿 $z$ 轴是极大值。</div>
+</div>
+
+<div class="formula-block">
+  <p><strong>例题 3：$f(x,y) = x^4 + y^4 - 4xy + 1$</strong></p>
+  <div class="step"><strong>Step 1 — 求驻点</strong>：$\nabla f = \langle 4x^3 - 4y, 4y^3 - 4x \rangle = \langle 0,0 \rangle$。得 $x^3 = y$ 且 $y^3 = x$。</div>
+  <div class="step">代入：$x^9 = y^3 = x \implies x(x^8 - 1) = 0 \implies x = 0, \pm 1$。</div>
+  <div class="step">对应三个驻点：$(0,0)$，$(1,1)$，$(-1,-1)$。</div>
+  <div class="step"><strong>Step 2 — Hessian</strong>：$f_{xx} = 12x^2$，$f_{xy} = -4$，$f_{yy} = 12y^2$。$\det(H) = 144x^2y^2 - 16$。</div>
+  <div class="step"><strong>在 $(0,0)$</strong>：$\det(H) = -16 < 0 \implies$ <strong>鞍点</strong>。</div>
+  <div class="step"><strong>在 $(1,1)$</strong>：$f_{xx} = 12 > 0$，$\det(H) = 144 - 16 = 128 > 0 \implies$ <strong>局部极小值</strong>。</div>
+  <div class="step"><strong>在 $(-1,-1)$</strong>：$f_{xx} = 12 > 0$，$\det(H) = 144 - 16 = 128 > 0 \implies$ <strong>局部极小值</strong>。</div>
+</div>
+
+<h2>六、一般判别定理</h2>
+
+<div class="thm-box">
+  <div class="thm-label">正定/负定判别 — General Hessian Test</div>
+  <p>设 $H$ 是 $f$ 在驻点 $\mathbf{a}$ 处的 Hessian 矩阵（对称）。则：</p>
+  <ul>
+    <li>$H$ <strong>正定</strong>（所有特征值 $> 0$）$\implies$ $\mathbf{a}$ 是严格局部极小值点</li>
+    <li>$H$ <strong>负定</strong>（所有特征值 $< 0$）$\implies$ $\mathbf{a}$ 是严格局部极大值点</li>
+    <li>$H$ <strong>不定</strong>（正特征值和负特征值都有）$\implies$ $\mathbf{a}$ 是鞍点</li>
+    <li>$H$ <strong>半定</strong>（有特征值为零）$\implies$ 判别法失效</li>
+  </ul>
+  <p>在 $n=2$ 和 $n=3$ 的考试中，用主子式判别比求特征值更快——但两者在数学上等价。</p>
+</div>
+
+<h2>七、考试真题</h2>
+
+<div class="quiz-block">
+  <div class="q-title">Q1：<span class="exam-tag">19-Q4a</span> 对于 $f(x,y,z) = x^2 + xy + y^2 + z^2$，求它的所有驻点并分类。</div>
+  <div class="option"><strong>A.</strong> $(0,0,0)$ 是局部极大值</div>
+  <div class="option correct"><strong>B.</strong> $(0,0,0)$ 是局部极小值</div>
+  <div class="option"><strong>C.</strong> $(0,0,0)$ 是鞍点</div>
+  <div class="option"><strong>D.</strong> 没有驻点</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>$\nabla f = \langle 2x + y, x + 2y, 2z \rangle = \langle 0,0,0 \rangle \implies$ 唯一驻点 $(0,0,0)$。</p>
+    <p>Hessian：$H = \begin{bmatrix} 2 & 1 & 0 \\ 1 & 2 & 0 \\ 0 & 0 & 2 \end{bmatrix}$。</p>
+    <p>主子式：$\det(H_1) = 2 > 0$，$\det(H_2) = \det\begin{bmatrix}2&1\\1&2\end{bmatrix} = 4-1 = 3 > 0$，$\det(H_3) = 2 \cdot 3 = 6 > 0$。全部为正 $\implies$ 局部极小值。</p>
+    <p>事实上这个函数等于 $(x + \frac{1}{2}y)^2 + \frac{3}{4}y^2 + z^2 \ge 0$，在 $(0,0,0)$ 处取得全局最小值 0。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q2：<span class="exam-tag">22-Q1a-ii</span> 对于 $f(x,y) = xy$，原点 $(0,0)$ 是什么类型的临界点？</div>
+  <div class="option"><strong>A.</strong> 局部极大值</div>
+  <div class="option"><strong>B.</strong> 局部极小值</div>
+  <div class="option correct"><strong>C.</strong> 鞍点</div>
+  <div class="option"><strong>D.</strong> 无法判定</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：C</span></p>
+    <p>$f_x = y$，$f_y = x$。$\nabla f(0,0) = \langle 0,0 \rangle$，确实是一个驻点。</p>
+    <p>Hessian：$f_{xx} = 0$，$f_{xy} = 1$，$f_{yy} = 0$。$\det(H) = 0 \cdot 0 - 1^2 = -1 < 0 \implies$ 鞍点。</p>
+    <p>直观上：沿 $y=x$ 方向，$f(x,x)=x^2 \ge 0$（像极小值）；沿 $y=-x$ 方向，$f(x,-x) = -x^2 \le 0$（像极大值）。标准的马鞍形！</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q3：如果 $f(x,y)$ 在驻点处的 Hessian 行列式等于零，这意味着什么？</div>
+  <div class="option"><strong>A.</strong> 一定是局部极大值</div>
+  <div class="option"><strong>B.</strong> 一定是局部极小值</div>
+  <div class="option"><strong>C.</strong> 一定是鞍点</div>
+  <div class="option correct"><strong>D.</strong> 二阶判别法失效，需要进一步分析</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：D</span></p>
+    <p>当 $\det(H) = 0$ 时，Hessian 矩阵至少有一个特征值为零。在零特征值对应的方向上，二阶近似不能告诉你任何信息——函数可能在这个方向上是极值，也可能不是。</p>
+    <p>典型的例子：$f(x,y) = x^4 + y^4$ 在 $(0,0)$ 处 $\det(H) = 0$，但它是全局极小值。而 $f(x,y) = x^3$ 在 $(0,0)$ 处 $\det(H) = 0$（看成一元函数），却是拐点。</p>
+  </div>
+</div>
+
+<div class="quiz-block">
+  <div class="q-title">Q4：对于 $n=2$ 的 Hessian 判别法，局部极大值的条件是？</div>
+  <div class="option"><strong>A.</strong> $f_{xx} > 0$ 且 $f_{xx}f_{yy} - f_{xy}^2 > 0$</div>
+  <div class="option correct"><strong>B.</strong> $f_{xx} < 0$ 且 $f_{xx}f_{yy} - f_{xy}^2 > 0$</div>
+  <div class="option"><strong>C.</strong> $f_{xx}f_{yy} - f_{xy}^2 < 0$</div>
+  <div class="option"><strong>D.</strong> $f_{xx} < 0$ 且 $f_{xx}f_{yy} - f_{xy}^2 < 0$</div>
+  <div class="explanation">
+    <p><span class="correct">正确答案：B</span></p>
+    <p>记住交替符号规则：第一个主子式 $f_{xx} < 0$（负定开始的标志），第二个主子式（即整个行列式）$> 0$。A 是局部极小值的条件，C 是鞍点（行列式为负）。</p>
+  </div>
+</div>
+
+<div class="summary-box">
+  <h3>本课小结</h3>
+  <ul>
+    <li><strong>极值点分类</strong>：内部极值点 $\implies$ 驻点（$\nabla f = \mathbf{0}$）、奇异点或边界点</li>
+    <li><strong>临界点</strong> = 驻点 + 奇异点；鞍点 = 驻点但非极值点</li>
+    <li><strong>Hessian 矩阵</strong>：$H_{ij} = \frac{\partial^2 f}{\partial x_i \partial x_j}$，对称（由 Clairaut 定理保证）</li>
+    <li><strong>$n=2$ 判别法</strong>：
+      <ul>
+        <li>$\det(H_1) < 0$ 且 $\det(H_2) > 0$ $\implies$ 局部极大</li>
+        <li>$\det(H_1) > 0$ 且 $\det(H_2) > 0$ $\implies$ 局部极小</li>
+        <li>$\det(H_2) < 0$ $\implies$ 鞍点</li>
+        <li>$\det(H_2) = 0$ $\implies$ 无法判定</li>
+      </ul>
+    </li>
+    <li><strong>$n=3$ 判别法</strong>：全正 $\implies$ 极小；正负正 $\implies$ 极大；其他（行列式非零）$\implies$ 鞍点</li>
+    <li><strong>一般判别</strong>：Hessian 正定 $\implies$ 局部极小；负定 $\implies$ 局部极大；不定 $\implies$ 鞍点</li>
+    <li><strong>经典鞍点</strong>：$f(x,y) = x^2 - y^2$（沿 $x$ 极小，沿 $y$ 极大）</li>
+  </ul>
+</div>
+
+<div class="ask-agent">
+  <div class="label">还有疑问？</div>
+  <p>Hessian 主子式判别法是 MVA 考试的重中之重。如果你对某个具体函数怎么分类有疑问，把函数发给我，我们一起来一步步地求驻点、算 Hessian、判定类型。考试中这部分大概占据 10-15 分！</p>
+</div>
+
+</body>
+</html>
