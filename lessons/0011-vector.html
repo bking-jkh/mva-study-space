@@ -117,7 +117,7 @@ MathJax = {
   <h3>线积分的计算</h3>
   <p>给定向量场 $F$ 和参数化曲线 $r(t), a \le t \le b$：</p>
   <p style="text-align:center; font-size:1.15em; margin:0.5rem 0;">
-    $\int_C F\cdotdr = \int_aᵇ F(r(t)) \cdot r'(t) dt$
+    $\int_C F \cdot dr = \int_a^b F(r(t)) \cdot r'(t) dt$
   </p>
   <p><strong>符号解释：</strong> $dr$ 是曲线的有向线元（<span class="en-term">oriented line element</span>），等于 $r'(t) dt$。物理上，如果 $F$ 是力场，$\int_C F\cdotdr$ 就是力沿曲线做的功（<span class="en-term">work</span>）。</p>
   <p>闭曲线（<span class="en-term">closed curve</span>）上的线积分称为<strong>环量</strong>（<span class="en-term">circulation</span>），记为 $\oint_C F\cdotdr$。</p>
@@ -185,22 +185,22 @@ MathJax = {
 
 <div class="concept-box">
   <div class="label">Stokes 定理的核心地位</div>
-  <p>注意：Green 定理实际上是 Stokes 定理的特例——当 $S$ 是 xy 平面上的一块平面区域时，$(curl F)\cdotn = \partial F_2/\partial x - \partial F_1/\partial y$（取 $n = k$），Stokes 定理就退化为 Green 定理。</p>
+  <p>注意：Green 定理实际上是 Stokes 定理的特例——当 $S$ 是 xy 平面上的一块平面区域时，$(curl F)\cdot n = \partial F_2/\partial x - \partial F_1/\partial y$（取 $n = k$），Stokes 定理就退化为 Green 定理。</p>
   <p>Stokes 定理告诉我们一个深刻的物理事实：<strong>向量场绕边界一周的环量，完全由内部每一点的旋度决定</strong>。这也解释了为什么保守场（$curl F = 0$）的环量为 0——内部没有旋度，「转不起来」。</p>
 </div>
 
 <div class="formula-block">
   <h3>用 Stokes 定理证明 curl(∇f) = 0（19-Q11c）</h3>
   <div class="step"><strong>Step 1：</strong> 任取一条闭曲线 $C$，它是某曲面 $S$ 的边界。</div>
-  <div class="step"><strong>Step 2：</strong> 由 Stokes 定理：$\oint_C \nabla f \cdot dr = \iint_S curl(\nabla f)\cdotn dS$。</div>
+  <div class="step"><strong>Step 2：</strong> 由 Stokes 定理：$\oint_C \nabla f \cdot dr = \iint_S curl(\nabla f)\cdot n dS$。</div>
   <div class="step"><strong>Step 3：</strong> 但 $\nabla f$ 是保守场：$\int_C \nabla f\cdotdr = f(终点) - f(起点) = 0$（闭曲线）。</div>
-  <div class="step"><strong>Step 4：</strong> 所以 $\iint_S curl(\nabla f)\cdotn dS = 0$ 对任意曲面 $S$ 成立。这意味着 $curl(\nabla f) = 0$。</div>
+  <div class="step"><strong>Step 4：</strong> 所以 $\iint_S curl(\nabla f)\cdot n dS = 0$ 对任意曲面 $S$ 成立。这意味着 $curl(\nabla f) = 0$。</div>
 </div>
 
 <div class="formula-block">
   <h3>环量密度的物理意义（21-Q2c）</h3>
-  <p>公式 $(curl F)\cdotn = \lim_{A \to 0} (1/A) \oint_C F\cdotdr$（其中边界 $C$ 围成的面积为 $A$，n 是法向）。</p>
-  <p>这意味着 $(curl F)\cdotn$ 是单位面积上的环量，即「该方向上的旋转密度」。一个扁平的叶片放在流场中，旋转最快的那个方向就是 $curl F$ 的方向。</p>
+  <p>公式 $(curl F)\cdot n = \lim_{A \to 0} (1/A) \oint_C F\cdotdr$（其中边界 $C$ 围成的面积为 $A$，n 是法向）。</p>
+  <p>这意味着 $(curl F)\cdot n$ 是单位面积上的环量，即「该方向上的旋转密度」。一个扁平的叶片放在流场中，旋转最快的那个方向就是 $curl F$ 的方向。</p>
 </div>
 
 <div class="warning">
@@ -211,7 +211,7 @@ MathJax = {
 
 <div class="thm-box">
   <div class="thm-label">GAUSS' DIVERGENCE THEOREM / 高斯散度定理</div>
-  <p>Let $D$ be a connected region in $\mathbb{R}^3$ whose boundary $S = \partialD$ is a piecewise smooth closed orientable surface. Let $n$ be the outward pointing unit normal vector field of $S$. If $F$ is a $C^1$ vector field defined on an open region containing $D$, then</p>
+  <p>Let $D$ be a connected region in $\mathbb{R}^3$ whose boundary $S = \partial D$ is a piecewise smooth closed orientable surface. Let $n$ be the outward pointing unit normal vector field of $S$. If $F$ is a $C^1$ vector field defined on an open region containing $D$, then</p>
   <p style="text-align:center; font-size:1.15em; margin:0.8rem 0;">
     $\iint_S F \cdot n dS = \iiint_D div F dV$.
   </p>
@@ -232,7 +232,7 @@ MathJax = {
     <strong>恒等式证明（19-Q12c）：</strong> $div(fF) = f div(F) + \nabla f \cdot F$。这是考试中常见的证明题起点。
   </div>
   <div class="step">
-    <strong>体积计算：</strong> 取 $F = \langlex, 0, 0\rangle$，则 $div F = 1$，$Volume(D) = \iiint 1 dV = ∯ x n_1 dS$。换言之，体积可以表示为边界上的曲面积分——跟 Green 定理求面积是同一个思路。
+    <strong>体积计算：</strong> 取 $F = \langle x, 0, 0\rangle$，则 $div F = 1$，$Volume(D) = \iiint 1 dV = \oiint x n_1 dS$。换言之，体积可以表示为边界上的曲面积分——跟 Green 定理求面积是同一个思路。
   </div>
 </div>
 
@@ -241,7 +241,7 @@ MathJax = {
   <p>计算向量场 $F = \langlex, y, z\rangle$ 通过单位球面 $x^2+y^2+z^2 = 1$ 的向外通量。</p>
   <div class="step"><strong>Step 1：</strong> 球面是封闭的 → 散度定理适用。</div>
   <div class="step"><strong>Step 2：</strong> $div F = \partial x/\partial x + \partial y/\partial y + \partial z/\partial z = 1+1+1 = 3$。</div>
-  <div class="step"><strong>Step 3：</strong> $∯ F\cdotn dS = \iiint 3 dV = 3 \times Volume(单位球) = 3 \times (4\pi/3) = 4\pi$。</div>
+  <div class="step"><strong>Step 3：</strong> $\oiint F\cdot n dS = \iiint 3 dV = 3 \times Volume(单位球) = 3 \times (4\pi/3) = 4\pi$。</div>
 </div>
 
 <h2>第七部分：三大定理的总览与考试应对</h2>
@@ -250,15 +250,15 @@ MathJax = {
   <h3>三大定理的递进关系</h3>
   <div class="step">
     <strong>Green 定理（2D 平面）：</strong> 闭曲线上的环量 = 区域内 (∂Q/∂x - ∂P/∂y) 的面积分<br>
-    $\oint_\partialD ω = \iint_D dω$
+    $\oint_\partial D ω = \iint_D dω$
   </div>
   <div class="step">
     <strong>Stokes 定理（3D 曲面）：</strong> 闭曲线上的环量 = 曲面上 curl 的面积分<br>
-    $\oint_{\partial S} F\cdotdr = \iint_S curl F\cdotn dS$
+    $\oint_{\partial S} F\cdotdr = \iint_S curl F\cdot n dS$
   </div>
   <div class="step">
     <strong>散度定理（3D 体积）：</strong> 闭曲面上的通量 = 体积内 div 的体积分<br>
-    $∯_\partialD F\cdotn dS = \iiint_D div F dV$
+    $\oiint_\partial D F\cdot n dS = \iiint_D div F dV$
   </div>
   <p style="margin-top:0.6rem;">这三个定理本质上都是推广的微积分基本定理（<span class="en-term">Generalized Stokes Theorem</span>）：$\int_\partialΩ ω = \int_Ω dω$——边界上的积分 = 内部的微分。</p>
 </div>
@@ -320,7 +320,7 @@ MathJax = {
     <strong>解析：</strong> $P = e^x - y^3, Q = cos y + x^3$。<br>
     $\partial Q/\partial x = 3x^2$，$\partial P/\partial y = -3y^2$。<br>
     $\partial Q/\partial x - \partial P/\partial y = 3x^2 - (-3y^2) = 3(x^2+y^2)$。<br>
-    $\oint = \iint 3(x^2+y^2) dA$。换到极坐标：$3\iint r^2 \cdot r dr dθ = 3\int_0^2\pi dθ \int_0^1 r^3 dr = 3\cdot2\pi\cdot(1/4) = 3\pi/2$。选 C。
+    $\oint = \iint 3(x^2+y^2) dA$。换到极坐标：$3\iint r^2 \cdot r dr dθ = 3\int_0^{2\pi} dθ \int_0^1 r^3 dr = 3\cdot2\pi\cdot(1/4) = 3\pi/2$。选 C。
   </div>
 </div>
 
@@ -332,8 +332,8 @@ MathJax = {
   <div class="option"><span class="wrong">D) 微积分基本定理</span></div>
   <div class="explanation">
     <strong>解析：</strong> 对任意闭曲面 $S$（边界为空），由散度定理和 Stokes 定理：<br>
-    $\iiint_D div(curl F) dV = ∯_S (curl F)\cdotn dS$。<br>
-    但 $S$ 是闭曲面，可以「从中切开」成两片，每片的边界方向相反 → 净环量为 0 → $∯_S curl F\cdotn dS = 0$。因此 $\iiint div(curl F) dV = 0$ 对任意区域成立 → $div(curl F) = 0$。选 C。
+    $\iiint_D div(curl F) dV = \oiint_S (curl F)\cdot n dS$。<br>
+    但 $S$ 是闭曲面，可以「从中切开」成两片，每片的边界方向相反 → 净环量为 0 → $\oiint_S curl F\cdot n dS = 0$。因此 $\iiint div(curl F) dV = 0$ 对任意区域成立 → $div(curl F) = 0$。选 C。
   </div>
 </div>
 
@@ -342,8 +342,8 @@ MathJax = {
   <h3>本课总结 — 三大定理速记表</h3>
   <ul>
     <li><strong>Green 定理：</strong> $\oint_C Pdx+Qdy = \iint_D (\partial Q/\partial x-\partial P/\partial y) dA$。平面闭曲线环量 → 面积分。</li>
-    <li><strong>Stokes 定理：</strong> $\oint_C F\cdotdr = \iint_S curl F\cdotn dS$。空间闭曲线环量 → 曲面积分。</li>
-    <li><strong>散度定理：</strong> $∯_S F\cdotn dS = \iiint_D div F dV$。闭曲面通量 → 体积分。</li>
+    <li><strong>Stokes 定理：</strong> $\oint_C F\cdotdr = \iint_S curl F\cdot n dS$。空间闭曲线环量 → 曲面积分。</li>
+    <li><strong>散度定理：</strong> $\oiint_S F\cdot n dS = \iiint_D div F dV$。闭曲面通量 → 体积分。</li>
     <li><strong>保守场判定：</strong> 2D 看 $\partial P/\partial y = \partial Q/\partial x$；3D 看 $curl F = 0$。记得加「单连通」的前提。</li>
     <li><strong>核心恒等式：</strong> $curl(\nabla f) = 0$（梯无旋），$div(curl F) = 0$（旋无散）</li>
     <li><strong>考试策略：</strong> 先判断积分类型 → 选择合适的定理 → 对应公式代入 → 计算。30-40% 的分数在这里！</li>
